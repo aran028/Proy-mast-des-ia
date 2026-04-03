@@ -24,10 +24,13 @@ export class CreatePlaylistUseCase {
       color: params.color,
     })
 
-    // Asignar userId si existe
+    // Mapeo camelCase → snake_case para Supabase
     const playlistData: PlaylistInsert = {
-      ...entityData,
-      userId: params.userId || null,
+      name: entityData.name,
+      description: entityData.description,
+      icon: entityData.icon,
+      color: entityData.color,
+      user_id: params.userId || null,
     }
 
     return this.playlistRepository.create(playlistData)

@@ -1,6 +1,9 @@
 import type { IToolRepository } from '@/application/ports/repositories'
-import type { Tool, ToolInsert } from '@/shared/types/database.types'
+import type { Tables, TablesInsert } from '@/shared/types/database.types'
 import { ToolEntity } from '@/domain/entities'
+
+type Tool = Tables<'tools'>
+type ToolInsert = TablesInsert<'tools'>
 
 export class CreateToolUseCase {
   constructor(private toolRepository: IToolRepository) {}
@@ -20,8 +23,13 @@ export class CreateToolUseCase {
     })
 
     const toolData: ToolInsert = {
-      ...entityData,
-      userId: params.userId || null,
+      name: entityData.name,
+      summary: entityData.summary,
+      image: entityData.image,
+      tags: entityData.tags,
+      website: entityData.website,
+      playlist_id: params.playlistId || null,
+      user_id: params.userId || null,
     }
 
     return this.toolRepository.create(toolData)

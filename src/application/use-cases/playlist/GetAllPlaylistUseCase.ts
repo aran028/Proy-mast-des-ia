@@ -1,5 +1,7 @@
 import type { IPlaylistRepository } from '@/application/ports/repositories'
-import type { Playlist } from '@/shared/types/database.types'
+import type { Tables } from '@/shared/types/database.types'
+
+type Playlist = Tables<'playlists'>
 
 export class GetAllPlaylistsUseCase {
   constructor(private playlistRepository: IPlaylistRepository) {}

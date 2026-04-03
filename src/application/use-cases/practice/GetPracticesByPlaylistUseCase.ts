@@ -1,5 +1,7 @@
 import type { IPracticeRepository } from '@/application/ports/repositories'
-import type { Practice } from '@/shared/types/database.types'
+import type { Tables } from '@/shared/types/database.types'
+
+type Practice = Tables<'practices'>
 
 export class GetPracticesByPlaylistUseCase {
   constructor(private practiceRepository: IPracticeRepository) {}

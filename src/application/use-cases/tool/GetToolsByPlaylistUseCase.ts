@@ -1,5 +1,7 @@
 import type { IToolRepository } from '@/application/ports/repositories'
-import type { Tool } from '@/shared/types/database.types'
+import type { Tables } from '@/shared/types/database.types'
+
+type Tool = Tables<'tools'>
 
 export class GetToolsByPlaylistUseCase {
   constructor(private toolRepository: IToolRepository) {}
