@@ -96,6 +96,8 @@ pnpm test:e2e     # Tests e2e con Playwright
 pnpm db:types     # Regenerar tipos de Supabase
 ```
 
+Run a single test file: `pnpm vitest run src/domain/entities/__tests__/playlist.entity.test.ts`
+
 ## Convenciones
 
 - Componentes shadcn en `src/presentation/components/ui/`
@@ -103,3 +105,6 @@ pnpm db:types     # Regenerar tipos de Supabase
 - Los use cases no importan directamente de infrastructure — usan puertos (interfaces)
 - Nombrado en kebab-case para archivos, PascalCase para clases y componentes
 - `.env.local` para variables de entorno locales (no commitear)
+- Tests unitarios colocados en `__tests__/` dentro del mismo directorio del archivo bajo prueba
+- Las entidades de dominio exponen un método estático `create()` que valida los datos de entrada y lanza `Error` (o subclase de `DomainException`) ante datos inválidos; el constructor acepta datos ya validados/persistidos
+- Excepciones de dominio en `src/domain/exceptions/`: usar `DomainException` como base, con subclases tipadas (ej. `PlaylistNotFoundException`)
