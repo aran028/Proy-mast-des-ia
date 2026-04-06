@@ -38,8 +38,9 @@ export default function RegisterPage() {
       await signUp(email, password)
       alert('Revisa tu email para confirmar la cuenta')
       router.push('/login')
-    } catch (err: any) {
-      setError(err.message || 'Error al registrarse')
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error al registrarse'
+      setError(message)
     } finally {
       setLoading(false)
     }

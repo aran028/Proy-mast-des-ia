@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Upload, X } from 'lucide-react'
 import type { Tables } from '@/shared/types/database.types'
+import Image from 'next/image'
 
 type Tool = Tables<'tools'>
 
@@ -187,7 +188,7 @@ export default function EditToolForm({ tool }: Props) {
         {/* Preview de la imagen */}
         {imagePreview && (
           <div className="mb-3 relative inline-block">
-            <img 
+            <Image
               src={imagePreview} 
               alt="Preview" 
               className="w-32 h-32 object-cover rounded-lg border border-zinc-700"

@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Sidebar } from '@/presentation/components/layout/sidebar'
-import { useAuth, usePlaylists, useTools } from '@/presentation/hooks'
+import { useAuth, usePlaylists} from '@/presentation/hooks'
 import { Spinner } from '@/presentation/components/ui/spinner'
 
 export default function DashboardPage() {

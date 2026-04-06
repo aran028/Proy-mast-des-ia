@@ -29,8 +29,9 @@ export function useTools(playlistId?: string): UseToolsReturn {
         } else {
           setError(data.error || 'Error al cargar tools')
         }
-      } catch (e: any) {
-        setError(e.message)
+      } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : 'Error al cargar tools'
+        setError(message)
       } finally {
         setLoading(false)
       }

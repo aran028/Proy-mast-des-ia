@@ -26,8 +26,9 @@ export function usePlaylists(): UsePlaylistsReturn {
         } else {
           setError(data.error || 'Error al cargar playlists')
         }
-      } catch (e: any) {
-        setError(e.message)
+      } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : 'Error al cargar playlists'
+        setError(message)
       } finally {
         setLoading(false)
       }

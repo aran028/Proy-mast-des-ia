@@ -4,7 +4,7 @@ import { Badge } from '../ui/badge'
 import type { Tables } from '@/shared/types/database.types'
 
 type Practice= Tables<'practices'>
-const typeIcons: Record<string, React.ComponentType<any>> = {
+const typeIcons: Record<string, typeof FileText> = {
   rag: FileText,
   automation: Settings,
   extraction: Link2,
@@ -22,14 +22,14 @@ interface PracticeCardProps {
   practice: Practice
 }
 
-export function PracticeCard({ practice }: PracticeCardProps) {
+export function PracticeCard({ practice }: Readonly<PracticeCardProps>) {
   const Icon = practice.type ? typeIcons[practice.type] : FileText
   const label = practice.type ? typeLabels[practice.type] : 'Práctica'
 
   return (
     <Card className="cursor-pointer hover:bg-zinc-800 transition-colors p-4">
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center flex-shrink-0">
+        <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center shrink-0">
           <Icon className="w-5 h-5 text-indigo-400" />
         </div>
         

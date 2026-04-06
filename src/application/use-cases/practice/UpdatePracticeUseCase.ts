@@ -1,5 +1,5 @@
 import type { IPracticeRepository } from '@/application/ports/repositories'
-import type { Tables, TablesUpdate } from '@/shared/types/database.types'
+import type { Json, Tables, TablesUpdate } from '@/shared/types/database.types'
 import { PracticeNotFoundException } from '@/domain/exceptions'
 import type { PracticeType } from '@/domain/entities'
 
@@ -7,12 +7,12 @@ type Practice = Tables<'practices'>
 type PracticeUpdate = TablesUpdate<'practices'>
 
 export class UpdatePracticeUseCase {
-  constructor(private practiceRepository: IPracticeRepository) {}
+  constructor(private readonly practiceRepository: IPracticeRepository) {}
 
   async execute(id: string, data: {
     title?: string
     description?: string
-    content?: Record<string, unknown>
+    content?: Json | null
     type?: PracticeType
     toolId?: string
     playlistId?: string
@@ -27,7 +27,7 @@ export class UpdatePracticeUseCase {
     const updateData: PracticeUpdate = {
       ...(data.title !== undefined && { title: data.title }),
       ...(data.description !== undefined && { description: data.description }),
-      ...(data.content !== undefined && { content: data.content as any }), // Cast necesario por limitación de tipos Json
+      ...(data.content !== undefined && { content: data.content }),
       ...(data.type !== undefined && { type: data.type }),
       ...(data.toolId !== undefined && { tool_id: data.toolId }),
       ...(data.playlistId !== undefined && { playlist_id: data.playlistId }),

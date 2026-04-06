@@ -1,7 +1,8 @@
-import { ExternalLink,Play} from 'lucide-react'
+import { Play} from 'lucide-react'
 import { Card } from '../ui/card'
 import { Badge } from '../ui/badge'
 import type { Tables} from '@/shared/types/database.types'
+import Image from 'next/image'
 
 
 type Tool = Tables<'tools'>
@@ -16,7 +17,7 @@ export function ToolCard({ tool }: ToolCardProps) {
       {/* Imagen con aspect ratio fijo */}
       <div className="relative w-full aspect-video overflow-hidden bg-zinc-800 rounded-t-lg">
         {tool.image ? (
-          <img 
+          <Image
             src={tool.image} 
             alt={tool.name} 
             className="w-full h-full object-cover"
