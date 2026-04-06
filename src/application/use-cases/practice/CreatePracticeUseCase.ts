@@ -31,6 +31,7 @@ export class CreatePracticeUseCase {
       type: entityData.type,
       playlist_id: params.playlistId || null,
       tool_id: params.toolId || null,
+      user_id: params.userId || null,
     }
 
     return this.practiceRepository.create(practiceData)

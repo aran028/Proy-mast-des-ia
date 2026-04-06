@@ -128,3 +128,21 @@
     @apply font-sans;
   }
 }
+
+/* Estilos personalizados de scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000; /* Fondo negro */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a; /* Gris oscuro (zinc-800) */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46; /* Gris un poco más claro al hover (zinc-700) */
+}

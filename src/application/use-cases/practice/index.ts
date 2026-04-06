@@ -1,3 +1,6 @@
 export { GetAllPracticesUseCase } from './GetAllPracticesUseCase'
 export { GetPracticesByPlaylistUseCase } from './GetPracticesByPlaylistUseCase'
+export { GetPracticesByToolUseCase } from './GetPracticesByToolUseCase'
 export { CreatePracticeUseCase } from './CreatePracticeUseCase'
+export { UpdatePracticeUseCase } from './UpdatePracticeUseCase'
+export { DeletePracticeUseCase } from './DeletePracticeUseCase'
