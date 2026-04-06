@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/infrastructure/database/supabase/server'
-import {Link} form 'next/link'
+import Link from 'next/link'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
