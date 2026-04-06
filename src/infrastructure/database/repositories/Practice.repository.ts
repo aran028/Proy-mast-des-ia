@@ -1,22 +1,19 @@
 import type { IPracticeRepository } from '@/application/ports/repositories'
-import type { Tables, TablesInsert, TablesUpdate } from '@/shared/types/database.types'
-import { createServerClient } from '../supabase/server'
+import type { Tables, TablesInsert, TablesUpdate, Database } from '@/shared/types/database.types'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 type Practice = Tables<'practices'>
 type PracticeInsert = TablesInsert<'practices'>
 type PracticeUpdate = TablesUpdate<'practices'>
 
-
-
 export class PracticeRepository implements IPracticeRepository {
-  private client = createServerClient()
+  constructor(private client: SupabaseClient<Database>) {}
 
   async findAll(): Promise<Practice[]> {
     const { data, error } = await this.client
       .from('practices')
       .select('*')
       .order('created_at', { ascending: false })
-    
     if (error) throw error
     return data || []
   }
@@ -27,7 +24,6 @@ export class PracticeRepository implements IPracticeRepository {
       .select('*')
       .eq('id', id)
       .single()
-    
     if (error) return null
     return data
   }
@@ -38,7 +34,6 @@ export class PracticeRepository implements IPracticeRepository {
       .select('*')
       .eq('playlist_id', playlistId)
       .order('created_at', { ascending: false })
-    
     if (error) throw error
     return data || []
   }
@@ -49,7 +44,6 @@ export class PracticeRepository implements IPracticeRepository {
       .select('*')
       .eq('tool_id', toolId)
       .order('created_at', { ascending: false })
-    
     if (error) throw error
     return data || []
   }
@@ -60,7 +54,6 @@ export class PracticeRepository implements IPracticeRepository {
       .insert(data)
       .select()
       .single()
-    
     if (error) throw error
     return practice
   }
@@ -72,7 +65,6 @@ export class PracticeRepository implements IPracticeRepository {
       .eq('id', id)
       .select()
       .single()
-    
     if (error) throw error
     return practice
   }
@@ -82,7 +74,6 @@ export class PracticeRepository implements IPracticeRepository {
       .from('practices')
       .delete()
       .eq('id', id)
-    
     if (error) throw error
   }
 }

@@ -1,22 +1,19 @@
 import type { IPlaylistRepository } from '@/application/ports/repositories'
-import type { Tables, TablesInsert, TablesUpdate } from '@/shared/types/database.types'
-import { createServerClient } from '../supabase/server'
-
+import type { Tables, TablesInsert, TablesUpdate, Database } from '@/shared/types/database.types'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 type Playlist = Tables<'playlists'>
 type PlaylistInsert = TablesInsert<'playlists'>
 type PlaylistUpdate = TablesUpdate<'playlists'>
 
-
 export class PlaylistRepository implements IPlaylistRepository {
-  private client = createServerClient()
+  constructor(private client: SupabaseClient<Database>) {}
 
   async findAll(): Promise<Playlist[]> {
     const { data, error } = await this.client
       .from('playlists')
       .select('*')
-      .order('order_num', { ascending: true })
-    
+      .order('created_at', { ascending: true })
     if (error) throw error
     return data || []
   }
@@ -27,7 +24,6 @@ export class PlaylistRepository implements IPlaylistRepository {
       .select('*')
       .eq('id', id)
       .single()
-    
     if (error) return null
     return data
   }
@@ -38,7 +34,6 @@ export class PlaylistRepository implements IPlaylistRepository {
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
-    
     if (error) throw error
     return data || []
   }
@@ -49,7 +44,6 @@ export class PlaylistRepository implements IPlaylistRepository {
       .insert(data)
       .select()
       .single()
-    
     if (error) throw error
     return playlist
   }
@@ -61,7 +55,6 @@ export class PlaylistRepository implements IPlaylistRepository {
       .eq('id', id)
       .select()
       .single()
-    
     if (error) throw error
     return playlist
   }
@@ -71,7 +64,6 @@ export class PlaylistRepository implements IPlaylistRepository {
       .from('playlists')
       .delete()
       .eq('id', id)
-    
     if (error) throw error
   }
 }

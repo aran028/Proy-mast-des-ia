@@ -12,8 +12,8 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run --passWithNoTests",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
-
+    "test:e2e:ui": "playwright test --ui",    
+    "db:types": "npx supabase gen types typescript --project-id xlkprremdjwlgmzgytoq --schema public > ./src/shared/types/database.types.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.0",

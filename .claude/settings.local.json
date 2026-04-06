@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm vitest:*)",
+      "Bash(tee /tmp/test-output.txt)",
+      "Bash(echo \"RC=$?\")",
+      "Read(//tmp/**)"
+    ]
+  }
+}

@@ -4,7 +4,7 @@ import type { IPracticeRepository } from '@/application/ports/repositories'
 
 const mockPractice = {
   id: '1', title: 'Build a RAG', description: null, content: null,
-  type: null, playlist_id: 'playlist-1', tool_id: null, created_at: '2024-01-01',
+  type: null, playlist_id: 'playlist-1', tool_id: null, user_id: null, created_at: '2024-01-01',
 }
 
 const mockRepo: IPracticeRepository = {
