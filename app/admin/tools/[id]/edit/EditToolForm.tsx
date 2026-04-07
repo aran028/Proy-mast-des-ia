@@ -186,12 +186,13 @@ export default function EditToolForm({ tool }: Props) {
         <label className="block text-sm text-zinc-400 mb-2">Imagen</label>
         
         {/* Preview de la imagen */}
-        {imagePreview && (
-          <div className="mb-3 relative inline-block">
+        {imagePreview && (URL.canParse(imagePreview) || imagePreview.startsWith('data:')) && (
+          <div className="mb-3 relative inline-block w-32 h-32">
             <Image
-              src={imagePreview} 
-              alt="Preview" 
-              className="w-32 h-32 object-cover rounded-lg border border-zinc-700"
+              src={imagePreview}
+              alt="Preview"
+              fill
+              className="object-cover rounded-lg border border-zinc-700"
             />
             <button
               type="button"
