@@ -32,7 +32,7 @@ export function HeroSection({ tools }: HeroSectionProps) {
     <section className="relative mb-8 overflow-hidden rounded-xl bg-zinc-900">
       <div className="relative px-8 pb-8 pt-10">
         {/* Label */}
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-400 mb-5">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-pink-500 mb-5">
           Destacado
         </div>
 
@@ -50,7 +50,7 @@ export function HeroSection({ tools }: HeroSectionProps) {
             {featured.tags && featured.tags.length > 0 && (
               <div className="mt-4 flex items-center gap-2 flex-wrap">
                 {featured.tags.slice(0, 3).map(tag => (
-                  <span key={tag} className="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded-full">
+                  <span key={tag} className="text-xs bg-pink-500 text-white px-2 py-1 rounded-full">
                     {tag}
                   </span>
                 ))}
@@ -63,7 +63,7 @@ export function HeroSection({ tools }: HeroSectionProps) {
                 href={featured.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-6 rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-indigo-700 hover:scale-105"
+                className="inline-flex items-center gap-2 mt-6 rounded-full bg-pink-600 px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-indigo-700 hover:scale-105"
               >
                 Visitar
                 <ExternalLink className="size-4" />
@@ -89,7 +89,7 @@ export function HeroSection({ tools }: HeroSectionProps) {
                   key={i}
                   onClick={() => goTo(i)}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === current ? 'w-6 bg-indigo-500' : 'w-2 bg-zinc-700 hover:bg-zinc-600'
+                    i === current ? 'w-6 bg-pink-500' : 'w-2 bg-zinc-700 hover:bg-zinc-600'
                   }`}
                   aria-label={`Ir a slide ${i + 1}`}
                 />
