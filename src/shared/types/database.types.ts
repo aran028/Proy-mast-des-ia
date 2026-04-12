@@ -166,6 +166,90 @@ export type Database = {
           },
         ]
       }
+      videos: {
+        Row: {
+          ai_classified: boolean | null
+          author: string | null
+          author_url: string | null
+          classification_confidence: number | null
+          created_at: string | null
+          description: string | null
+          duration: number | null
+          id: string
+          platform: string
+          platform_video_id: string
+          playlist_id: string | null
+          published_at: string | null
+          status: string | null
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          tool_id: string | null
+          updated_at: string | null
+          video_url: string
+          view_count: number | null
+        }
+        Insert: {
+          ai_classified?: boolean | null
+          author?: string | null
+          author_url?: string | null
+          classification_confidence?: number | null
+          created_at?: string | null
+          description?: string | null
+          duration?: number | null
+          id?: string
+          platform: string
+          platform_video_id: string
+          playlist_id?: string | null
+          published_at?: string | null
+          status?: string | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          tool_id?: string | null
+          updated_at?: string | null
+          video_url: string
+          view_count?: number | null
+        }
+        Update: {
+          ai_classified?: boolean | null
+          author?: string | null
+          author_url?: string | null
+          classification_confidence?: number | null
+          created_at?: string | null
+          description?: string | null
+          duration?: number | null
+          id?: string
+          platform?: string
+          platform_video_id?: string
+          playlist_id?: string | null
+          published_at?: string | null
+          status?: string | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          tool_id?: string | null
+          updated_at?: string | null
+          video_url?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "videos_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "videos_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

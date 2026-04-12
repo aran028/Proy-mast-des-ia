@@ -43,7 +43,7 @@ export function Sidebar({ playlists, activePlaylist }: SidebarProps) {
   const searchParams = useSearchParams()
 
   return (
-    <aside className="fixed left-0 top-0 z-30 flex h-screen w-[72px] flex-col gap-2 p-2 lg:w-[320px] bg-black">
+    <aside className="fixed left-0 top-0 z-30 flex h-screen w-[72px] flex-col gap-2 p-2 sm:w-[240px] lg:w-[280px] bg-black">
       {/* Top nav */}
       <nav className="rounded-lg bg-zinc-900 p-4">
         <ul className="flex flex-col gap-4">
@@ -55,7 +55,7 @@ export function Sidebar({ playlists, activePlaylist }: SidebarProps) {
               }`}
             >
               <Home className="size-6 shrink-0" />
-              <span className="hidden lg:inline text-sm font-medium">Home</span>
+              <span className="hidden sm:inline text-sm font-medium">Home</span>
             </Link>
           </li>
           
@@ -70,12 +70,12 @@ export function Sidebar({ playlists, activePlaylist }: SidebarProps) {
             className="flex items-center gap-3 text-sm font-medium text-zinc-400 hover:text-white transition-colors"
           >
             <Library className="size-8 shrink-0" />
-            <span className="hidden lg:inline">Playlists de IA</span>
+            <span className="hidden sm:inline">Playlists de IA</span>
           </button>
         </div>
 
         {isExpanded && (
-          <div className="flex-1 overflow-y-auto px-2 pb-2">
+          <div className="flex-1 overflow-y-auto px-1 sm:px-2 pb-2">
             {playlists.map((playlist) => {
               const isActive = activePlaylist === playlist.id
               const bgClass = iconColors[playlist.icon || 'layers'] || 'bg-gradient-to-br from-gray-400 to-gray-600'
@@ -89,12 +89,12 @@ export function Sidebar({ playlists, activePlaylist }: SidebarProps) {
                   }`}
                 >
                   {/* Icono con gradiente */}
-                  <div className={`flex size-12 shrink-0 items-center justify-center rounded-lg text-white transition-transform group-hover:scale-110 ${bgClass}`}>
+                  <div className={`flex size-8 sm:size-10 shrink-0 items-center justify-center rounded-md sm:rounded-lg text-white transition-transform group-hover:scale-110 ${bgClass}`}>
                     {iconMap[playlist.icon || 'layers'] || <Layers className="size-5" />}
                   </div>
                   
                   {/* Info */}
-                  <div className="hidden min-w-0 lg:block">
+                  <div className="hidden min-w-0 sm:block">
                     <p className="truncate text-sm font-semibold text-white group-hover:text-pink-500 transition-colors">{playlist.name}</p>                   
                     
                   </div>
