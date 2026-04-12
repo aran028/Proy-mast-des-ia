@@ -9,6 +9,8 @@ import { VideoEntity, VideoPlatform, VideoStatus } from '@/domain/entities/video
 import { VideoRepository } from '@/application/ports/repositories/VideoRepository'
 import { Database, TablesInsert, TablesUpdate } from '@/shared/types/database.types'
 
+type VideoRow = Database['public']['Tables']['videos']['Row']
+
 export class SupabaseVideoRepository implements VideoRepository {
   constructor(private readonly client: SupabaseClient<Database>) {}
 
@@ -121,7 +123,7 @@ export class SupabaseVideoRepository implements VideoRepository {
   /**
    * Mapea una fila de la base de datos a una entidad VideoEntity
    */
-  private mapToEntity(row: any): VideoEntity {
+  private mapToEntity(row: VideoRow): VideoEntity {
     return new VideoEntity({
       id: row.id,
       playlistId: row.playlist_id,
@@ -138,12 +140,12 @@ export class SupabaseVideoRepository implements VideoRepository {
       viewCount: row.view_count,
       publishedAt: row.published_at,
       tags: row.tags,
-      aiClassified: row.ai_classified,
-      classificationConfidence: row.classification_confidence 
-        ? Number(row.classification_confidence) 
+      aiClassified: row.ai_classified ?? false,
+      classificationConfidence: row.classification_confidence
+        ? Number(row.classification_confidence)
         : null,
-      status: row.status as VideoStatus,
-      createdAt: row.created_at,
+      status: (row.status as VideoStatus) ?? 'pending',
+      createdAt: row.created_at ?? new Date().toISOString(),
       updatedAt: row.updated_at,
     })
   }
