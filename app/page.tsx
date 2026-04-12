@@ -9,6 +9,7 @@ import { PlaylistCards } from '@/presentation/components/features/playlist-card'
 import { ToolGrid } from '@/presentation/components/features/tool-grid'
 import { Skeleton } from '@/presentation/components/ui/skeleton'
 import { usePlaylists, useTools, usePractices, useAuth } from '@/presentation/hooks'
+import { VideoGallery } from '@/presentation/components/features/video-gallery'
 
 export default function HomePage() {
   const searchParams = useSearchParams()
@@ -27,7 +28,7 @@ export default function HomePage() {
     return (
       <div className="flex h-screen bg-black">
         <Sidebar playlists={[]} />
-        <main className="flex-1 ml-[72px] lg:ml-[320px] p-6">
+        <main className="flex-1 ml-[72px] sm:ml-[240px] lg:ml-[280px] p-6">
           <div className="space-y-4">
             <Skeleton className="h-64 w-full" />
             <Skeleton className="h-8 w-48" />
@@ -48,7 +49,7 @@ export default function HomePage() {
     <div className="flex h-screen bg-black">
       <Sidebar playlists={playlists} activePlaylist={playlistId} />
       
-      <main className="flex-1 ml-[72px] lg:ml-[320px] flex flex-col overflow-hidden">
+      <main className="flex-1 ml-[72px] sm:ml-[240px] lg:ml-[280px] flex flex-col overflow-hidden">
         <Header onSearch={setSearchQuery} user={user} />
         
         <div className="flex-1 overflow-y-auto p-6 pb-32">
@@ -84,6 +85,15 @@ export default function HomePage() {
                   </div>
                 </div>
               )}
+              
+              {/* Galería de videos de la playlist */}
+              <VideoGallery 
+                playlistId={playlistId || undefined} 
+                title="Videos de YouTube" 
+              />
+
+
+
             </div>
           ) : (
             /* Home sin playlist - vista principal */
@@ -94,7 +104,8 @@ export default function HomePage() {
               {/* Cards de playlists */}
               <PlaylistCards playlists={playlists} />
               
-        
+              {/* Galería de videos - Todos los videos */}
+              <VideoGallery title="Últimos videos de IA" />
             </div>
           )}
         </div>

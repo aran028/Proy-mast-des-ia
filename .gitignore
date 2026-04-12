@@ -43,3 +43,5 @@ next-env.d.ts
 #images
 /public/images
 
+#Configuracion de scrapper de Youtube
+YouTube Video Scraper.json
