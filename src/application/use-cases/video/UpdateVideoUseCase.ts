@@ -6,11 +6,12 @@
 
 import { VideoEntity } from '@/domain/entities/video.entity'
 import { VideoRepository } from '@/application/ports/repositories/VideoRepository'
+import type { TablesUpdate } from '@/shared/types/database.types'
 
 export class UpdateVideoUseCase {
   constructor(private readonly videoRepository: VideoRepository) {}
 
-  async execute(id: string, data: Partial<VideoEntity>): Promise<VideoEntity> {
+  async execute(id: string, data: TablesUpdate<'videos'>): Promise<VideoEntity> {
     if (!id) {
       throw new Error('Video ID is required')
     }

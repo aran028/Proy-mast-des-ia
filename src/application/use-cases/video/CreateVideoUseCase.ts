@@ -39,10 +39,28 @@ export class CreateVideoUseCase {
     }
 
     // Validar y crear el video usando el método estático de la entidad
-    const videoData = VideoEntity.create(data)
+    const validated = VideoEntity.create(data)
 
-    // Persistir en la base de datos
-    const video = await this.videoRepository.create(videoData)
+    // Persistir en la base de datos (mapear a snake_case para Supabase)
+    const video = await this.videoRepository.create({
+      playlist_id: validated.playlistId,
+      tool_id: validated.toolId,
+      title: validated.title,
+      description: validated.description,
+      thumbnail_url: validated.thumbnailUrl,
+      video_url: validated.videoUrl,
+      platform: validated.platform,
+      platform_video_id: validated.platformVideoId,
+      author: validated.author,
+      author_url: validated.authorUrl,
+      duration: validated.duration,
+      view_count: validated.viewCount,
+      published_at: validated.publishedAt,
+      tags: validated.tags,
+      ai_classified: validated.aiClassified,
+      classification_confidence: validated.classificationConfidence,
+      status: validated.status,
+    })
     return { video, created: true }
   }
 }

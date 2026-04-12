@@ -7,7 +7,7 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { VideoEntity, VideoPlatform, VideoStatus } from '@/domain/entities/video.entity'
 import { VideoRepository } from '@/application/ports/repositories/VideoRepository'
-import { Database } from '@/shared/types/database.types'
+import { Database, TablesInsert, TablesUpdate } from '@/shared/types/database.types'
 
 export class SupabaseVideoRepository implements VideoRepository {
   constructor(private readonly client: SupabaseClient<Database>) {}
@@ -86,28 +86,10 @@ export class SupabaseVideoRepository implements VideoRepository {
     return data ? this.mapToEntity(data) : null
   }
 
-  async create(data: Omit<VideoEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<VideoEntity> {
+  async create(data: TablesInsert<'videos'>): Promise<VideoEntity> {
     const { data: created, error } = await this.client
       .from('videos')
-      .insert({
-        playlist_id: data.playlistId,
-        tool_id: data.toolId,
-        title: data.title,
-        description: data.description,
-        thumbnail_url: data.thumbnailUrl,
-        video_url: data.videoUrl,
-        platform: data.platform,
-        platform_video_id: data.platformVideoId,
-        author: data.author,
-        author_url: data.authorUrl,
-        duration: data.duration,
-        view_count: data.viewCount,
-        published_at: data.publishedAt,
-        tags: data.tags,
-        ai_classified: data.aiClassified,
-        classification_confidence: data.classificationConfidence,
-        status: data.status,
-      })
+      .insert(data)
       .select()
       .single()
 
@@ -115,32 +97,10 @@ export class SupabaseVideoRepository implements VideoRepository {
     return this.mapToEntity(created)
   }
 
-  async update(id: string, data: Partial<VideoEntity>): Promise<VideoEntity> {
-    const updateData: any = {}
-
-    if (data.playlistId !== undefined) updateData.playlist_id = data.playlistId
-    if (data.toolId !== undefined) updateData.tool_id = data.toolId
-    if (data.title !== undefined) updateData.title = data.title
-    if (data.description !== undefined) updateData.description = data.description
-    if (data.thumbnailUrl !== undefined) updateData.thumbnail_url = data.thumbnailUrl
-    if (data.videoUrl !== undefined) updateData.video_url = data.videoUrl
-    if (data.platform !== undefined) updateData.platform = data.platform
-    if (data.platformVideoId !== undefined) updateData.platform_video_id = data.platformVideoId
-    if (data.author !== undefined) updateData.author = data.author
-    if (data.authorUrl !== undefined) updateData.author_url = data.authorUrl
-    if (data.duration !== undefined) updateData.duration = data.duration
-    if (data.viewCount !== undefined) updateData.view_count = data.viewCount
-    if (data.publishedAt !== undefined) updateData.published_at = data.publishedAt
-    if (data.tags !== undefined) updateData.tags = data.tags
-    if (data.aiClassified !== undefined) updateData.ai_classified = data.aiClassified
-    if (data.classificationConfidence !== undefined) {
-      updateData.classification_confidence = data.classificationConfidence
-    }
-    if (data.status !== undefined) updateData.status = data.status
-
+  async update(id: string, data: TablesUpdate<'videos'>): Promise<VideoEntity> {
     const { data: updated, error } = await this.client
       .from('videos')
-      .update(updateData)
+      .update(data)
       .eq('id', id)
       .select()
       .single()

@@ -1,5 +1,9 @@
 // src/application/ports/repositories/video.repository.ts
+import type { TablesInsert, TablesUpdate } from '@/shared/types/database.types'
 import { VideoEntity } from '@/domain/entities/video.entity'
+
+type VideoInsert = TablesInsert<'videos'>
+type VideoUpdate = TablesUpdate<'videos'>
 
 export interface VideoRepository {
   findAll(): Promise<VideoEntity[]>
@@ -8,7 +12,7 @@ export interface VideoRepository {
   findByToolId(toolId: string): Promise<VideoEntity[]>
   findByPlatform(platform: string): Promise<VideoEntity[]>
   findByPlatformVideoId(platformVideoId: string): Promise<VideoEntity | null>
-  create(data: Omit<VideoEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<VideoEntity>
-  update(id: string, data: Partial<VideoEntity>): Promise<VideoEntity>
+  create(data: VideoInsert): Promise<VideoEntity>
+  update(id: string, data: VideoUpdate): Promise<VideoEntity>
   delete(id: string): Promise<void>
 }
