@@ -19,6 +19,7 @@ const mockTool = {
   playlist_id: null,
   user_id: null,
   created_at: '2024-01-01',
+  updated_at: '2024-01-01',
 }
 
 const mockToolRepo: IToolRepository = {
