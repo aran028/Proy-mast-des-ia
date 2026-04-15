@@ -23,6 +23,7 @@ export async function PATCH(request: Request, { params }: Params) {
       website: body.website,
       image: body.image,
       tags: body.tags,
+      supportsPrompt: body.supportsPrompt,
     })
 
     return NextResponse.json(result)

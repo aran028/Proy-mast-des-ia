@@ -1,7 +1,9 @@
-export { 
+export {
   DomainException,
   PlaylistNotFoundException,
   ToolNotFoundException,
   PracticeNotFoundException,
-  ValidationException
+  ValidationException,
+  ToolNotPromptEnabledException,
+  PromptGenerationException
 } from './domain.exception'

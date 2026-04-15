@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { Home, Search, Library, Brain, Code, Workflow, Terminal, Palette, BookOpen, GitBranch, Server, Layers } from 'lucide-react'
+import { Home, Search, Library, Brain, Code, Workflow, Terminal, Palette, BookOpen, GitBranch, Server, Layers, Sparkles } from 'lucide-react'
 import type { Tables} from '@/shared/types/database.types'
 
 
@@ -58,7 +58,17 @@ export function Sidebar({ playlists, activePlaylist }: SidebarProps) {
               <span className="hidden sm:inline text-sm font-medium">Home</span>
             </Link>
           </li>
-          
+          <li>
+            <Link
+              href="/prompt-generator"
+              className={`flex items-center gap-4 rounded-lg p-3 transition-all ${
+                pathname.startsWith('/prompt-generator') ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+              }`}
+            >
+              <Sparkles className="size-6 shrink-0 text-pink-500" />
+              <span className="hidden sm:inline text-sm font-medium">Prompt Generator</span>
+            </Link>
+          </li>
         </ul>
       </nav>
 

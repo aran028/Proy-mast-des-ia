@@ -1,6 +1,8 @@
-# AI Tools Hub
+# Tools de IA - Proyecto final del Máster de Desarrollo de Aplicaciones con IA
 
-Plataforma web para descubrir, organizar y practicar con herramientas de Inteligencia Artificial. Los usuarios pueden explorar herramientas agrupadas en playlists temáticas, guardar prácticas de uso y acceder a un panel de administración para la gestión de contenido.
+Plataforma web para descubrir herramientas o tools de Inteligencia Artificial agrupadas por categorias o playlists. Los usuarios pueden explorar las herramientas y encontrar vídeos de youtube sobre muchas de ellas. Cada una de las herramientas cuentan con un enlace a la web oficial y una descripción.
+Además la página dispone de un chatbot para resolver dudas sobre las herramientas. El administrador puede gestionar las playlists, tools y vídeos asociados a cada categoría a través de un panel de administración protegido por autenticación y autorización.
+
 
 Proyecto desarrollado como trabajo final del Máster en Desarrollo de Aplicaciones con IA, aplicando **Clean Architecture**, **React Server Components** y buenas prácticas de ingeniería de software.
 
@@ -50,7 +52,7 @@ src/
 └── shared/           # Tipos generados, constantes y utilidades transversales
 
 app/                  # Rutas Next.js (App Router) — fuera de src/
-├── (pages)/          # Páginas públicas: home, login, register
+├── (pages)/          # Páginas públicas: home, login, register,prompt-generator
 ├── dashboard/        # Dashboard del usuario autenticado
 ├── admin/            # Panel de administración (protegido por rol)
 ├── api/              # Route handlers REST
@@ -141,7 +143,7 @@ src/
 └── application/use-cases/
     ├── playlist/__tests__/             # 5 use cases cubiertos
     ├── tool/__tests__/                 # 6 use cases cubiertos
-    └── practice/__tests__/            # 5 use cases cubiertos
+    
 ```
 
 ---

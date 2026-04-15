@@ -4,6 +4,10 @@ export const config = {
     anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
   },
+  anthropic: {
+    apiKey: process.env.ANTHROPIC_API_KEY ?? '',
+    model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-4-5',
+  },
 } as const
 
 export function getSupabaseUrl() {
@@ -16,4 +20,12 @@ export function getSupabaseAnonKey() {
 
 export function getSupabaseServiceKey() {
   return config.supabase.serviceRoleKey
+}
+
+export function getAnthropicApiKey() {
+  return config.anthropic.apiKey
+}
+
+export function getAnthropicModel() {
+  return config.anthropic.model
 }

@@ -7,6 +7,7 @@ export class ToolEntity {
   image: string | null
   tags: string[] | null
   website: string | null
+  supportsPrompt: boolean
   readonly createdAt: string
   updatedAt: string | null
 
@@ -19,6 +20,7 @@ export class ToolEntity {
     image: string | null
     tags: string[] | null
     website: string | null
+    supportsPrompt: boolean
     createdAt: string
     updatedAt: string | null
   }) {
@@ -30,6 +32,7 @@ export class ToolEntity {
     this.image = data.image
     this.tags = data.tags
     this.website = data.website
+    this.supportsPrompt = data.supportsPrompt
     this.createdAt = data.createdAt
     this.updatedAt = data.updatedAt
   }
@@ -39,7 +42,8 @@ export class ToolEntity {
     summary?: string
     website?: string
     playlistId?: string
-  }): { playlistId: string | null; userId: null; name: string; summary: string | null; image: null; tags: null; website: string | null } {
+    supportsPrompt?: boolean
+  }): { playlistId: string | null; userId: null; name: string; summary: string | null; image: null; tags: null; website: string | null; supportsPrompt: boolean } {
     if (!data.name || data.name.length < 2) {
       throw new Error('Tool name must be at least 2 characters')
     }
@@ -51,6 +55,7 @@ export class ToolEntity {
       image: null,
       tags: null,
       website: data.website || null,
+      supportsPrompt: data.supportsPrompt ?? false,
     }
   }
 

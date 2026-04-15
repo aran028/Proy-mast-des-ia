@@ -11,6 +11,7 @@ const mockTools = [{
   tags: null,
   playlist_id: null,
   user_id: null,
+  supports_prompt: false,
   created_at: '2024-01-01',
   updated_at: null,
 }]
@@ -20,6 +21,7 @@ const mockRepo: IToolRepository = {
   findById: vi.fn(),
   findByPlaylistId: vi.fn(),
   findByUserId: vi.fn(),
+  findByPromptSupport: vi.fn(),
   search: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),

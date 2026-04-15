@@ -8,7 +8,7 @@ import { HeroSection } from '@/presentation/components/features/hero-section'
 import { PlaylistCards } from '@/presentation/components/features/playlist-card'
 import { ToolGrid } from '@/presentation/components/features/tool-grid'
 import { Skeleton } from '@/presentation/components/ui/skeleton'
-import { usePlaylists, useTools, usePractices, useAuth } from '@/presentation/hooks'
+import { usePlaylists, useTools, useAuth } from '@/presentation/hooks'
 import { VideoGallery } from '@/presentation/components/features/video-gallery'
 
 export default function HomePage() {
@@ -18,8 +18,7 @@ export default function HomePage() {
   const { user } = useAuth()
   const { playlists, loading: loadingPlaylists } = usePlaylists()
   const { tools, loading: loadingTools } = useTools(playlistId || undefined)
-  const { practices, loading: loadingPractices } = usePractices(playlistId || undefined)
-
+  
   const [searchQuery, setSearchQuery] = useState('')
 
   const activePlaylist = playlists.find(p => p.id === playlistId)
@@ -71,20 +70,7 @@ export default function HomePage() {
                 <ToolGrid tools={tools} title="TOOLS" />
               )}
               
-              {/* Prácticas */}
-              {practices.length > 0 && (
-                <div className="mt-8">
-                  <h2 className="text-xl font-bold text-white mb-4">Prácticas</h2>
-                  <div className="space-y-2">
-                    {practices.map(practice => (
-                      <div key={practice.id} className="bg-zinc-900 p-4 rounded-lg">
-                        <h3 className="font-medium text-white">{practice.title}</h3>
-                        <p className="text-sm text-zinc-500">{practice.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+          
               
               {/* Galería de videos de la playlist */}
               <VideoGallery 

@@ -94,7 +94,7 @@ export default function AdminVideosPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-white">Videos</h1>
         <Link href="/admin/videos/new"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md">
+          className="bg-pink-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md">
           + Nuevo video
         </Link>
       </div>
@@ -108,7 +108,7 @@ export default function AdminVideosPage() {
             placeholder="Buscar por título, autor, plataforma o tags..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 text-white rounded-md text-sm focus:outline-none focus:border-indigo-500"
+            className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 text-white rounded-md text-sm focus:outline-none focus:border-pink-500"
           />
         </div>
         <select

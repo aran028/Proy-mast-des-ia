@@ -19,6 +19,7 @@ export default function NewToolPage() {
       summary: formData.get('summary'),
       website: formData.get('website'),
       image: formData.get('image'),
+      supportsPrompt: formData.get('supportsPrompt') === 'on',
       // Convertimos el string de tags separados por comas en array
       tags: formData.get('tags')
         ? String(formData.get('tags')).split(',').map(t => t.trim()).filter(Boolean)
@@ -83,6 +84,19 @@ export default function NewToolPage() {
           <label className="block text-sm text-zinc-400 mb-1">Tags (separados por comas)</label>
           <input name="tags" placeholder="nlp, chat, openai"
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
+        </div>
+
+        <div className="flex items-start gap-2 pt-1">
+          <input
+            id="supportsPrompt"
+            name="supportsPrompt"
+            type="checkbox"
+            className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-pink-500 focus:ring-pink-500"
+          />
+          <label htmlFor="supportsPrompt" className="text-sm text-zinc-300">
+            <span>Esta herramienta funciona con prompts</span>
+            <span className="block text-xs text-zinc-500">Marca esta opción si la herramienta acepta prompts de texto. Aparecerá en la sección Prompt Generator.</span>
+          </label>
         </div>
 
         <div className="flex gap-3 pt-2">

@@ -12,6 +12,7 @@ const mockTool = {
   tags: null,
   playlist_id: 'playlist-1',
   user_id: 'user-1',
+  supports_prompt: false,
   created_at: '2024-01-01',
   updated_at: null,
 }
@@ -21,6 +22,7 @@ const mockRepo: IToolRepository = {
   findById: vi.fn(),
   findByPlaylistId: vi.fn(),
   findByUserId: vi.fn(),
+  findByPromptSupport: vi.fn(),
   search: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
@@ -79,6 +81,7 @@ describe('CreateToolUseCase', () => {
       image: null,
       tags: null,
       website: null,
+      supports_prompt: false,
       playlist_id: 'playlist-1',
       user_id: 'user-1',
     })

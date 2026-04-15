@@ -1,4 +1,4 @@
-export type Json =
+ export type Json =
   | string
   | number
   | boolean
@@ -47,57 +47,6 @@ export type Database = {
         }
         Relationships: []
       }
-      practices: {
-        Row: {
-          content: Json | null
-          created_at: string | null
-          description: string | null
-          id: string
-          playlist_id: string | null
-          title: string
-          tool_id: string | null
-          type: string | null
-          user_id: string | null
-        }
-        Insert: {
-          content?: Json | null
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          playlist_id?: string | null
-          title: string
-          tool_id?: string | null
-          type?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          content?: Json | null
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          playlist_id?: string | null
-          title?: string
-          tool_id?: string | null
-          type?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "practices_playlist_id_fkey"
-            columns: ["playlist_id"]
-            isOneToOne: false
-            referencedRelation: "playlists"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "practices_tool_id_fkey"
-            columns: ["tool_id"]
-            isOneToOne: false
-            referencedRelation: "tools"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       profiles: {
         Row: {
           created_at: string | null
@@ -127,6 +76,7 @@ export type Database = {
           name: string
           playlist_id: string | null
           summary: string | null
+          supports_prompt: boolean
           tags: string[] | null
           updated_at: string | null
           user_id: string | null
@@ -139,6 +89,7 @@ export type Database = {
           name: string
           playlist_id?: string | null
           summary?: string | null
+          supports_prompt?: boolean
           tags?: string[] | null
           updated_at?: string | null
           user_id?: string | null
@@ -151,6 +102,7 @@ export type Database = {
           name?: string
           playlist_id?: string | null
           summary?: string | null
+          supports_prompt?: boolean
           tags?: string[] | null
           updated_at?: string | null
           user_id?: string | null

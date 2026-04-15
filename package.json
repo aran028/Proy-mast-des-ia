@@ -16,6 +16,7 @@
     "db:types": "npx supabase gen types typescript --project-id xlkprremdjwlgmzgytoq --schema public > ./src/shared/types/database.types.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.65.0",
     "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.101.1",
     "class-variance-authority": "^0.7.1",

@@ -17,6 +17,7 @@ export async function POST(request: Request) {
       summary: body.summary,
       website: body.website,
       playlistId: body.playlistId,
+      supportsPrompt: body.supportsPrompt,
       userId: admin.id,
     })
 

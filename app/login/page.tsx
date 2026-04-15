@@ -46,7 +46,7 @@ export default function LoginPage() {
           )}
           
           <div>
-            <label className="block text-sm text-zinc-400 mb-1">Email</label>
+            <label className="block text-sm text-pink-400 mb-1">Email</label>
             <Input
               type="email"
               value={email}
@@ -57,7 +57,7 @@ export default function LoginPage() {
           </div>
           
           <div>
-            <label className="block text-sm text-zinc-400 mb-1">Contraseña</label>
+            <label className="block text-sm text-pink-400 mb-1">Contraseña</label>
             <Input
               type="password"
               value={password}
@@ -74,7 +74,7 @@ export default function LoginPage() {
 
         <p className="text-center text-zinc-400 text-sm mt-4">
           ¿No tienes cuenta?{' '}
-          <Link href="/register" className="text-indigo-400 hover:underline">
+          <Link href="/register" className="text-pink-400 hover:underline">
             Regístrate
           </Link>
         </p>
