@@ -10,7 +10,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = 'inline-flex items-center justify-center rounded-md font-medium transition-colors'
     
     const variants = {
-      primary: 'bg-indigo-600 text-white hover:bg-indigo-700',
+      primary: 'bg-pink-500 text-white hover:bg-pink-600',
       secondary: 'bg-zinc-800 text-white hover:bg-zinc-700',
       ghost: 'hover:bg-zinc-800 text-zinc-300',
       outline: 'border border-zinc-700 text-zinc-300 hover:bg-zinc-800',

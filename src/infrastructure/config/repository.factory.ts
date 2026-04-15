@@ -3,6 +3,8 @@ import { PlaylistRepository } from '@/infrastructure/database/repositories/Playl
 import { ToolRepository } from '@/infrastructure/database/repositories/Tool.repository'
 import { PracticeRepository } from '@/infrastructure/database/repositories/Practice.repository'
 import { SupabaseVideoRepository } from '@/infrastructure/database/supabase/repositories/video.repository.impl'
+import { AnthropicPromptGeneratorService } from '@/infrastructure/external/anthropic'
+import type { IPromptGeneratorService } from '@/application/ports/services'
 
 export async function createRepositories() {
   const supabase = await createClient()
@@ -12,4 +14,8 @@ export async function createRepositories() {
     practice: new PracticeRepository(supabase),
     video: new SupabaseVideoRepository(supabase),
   }
+}
+
+export function getPromptGeneratorService(): IPromptGeneratorService {
+  return new AnthropicPromptGeneratorService()
 }

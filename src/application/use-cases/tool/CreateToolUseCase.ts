@@ -14,12 +14,14 @@ export class CreateToolUseCase {
     website?: string
     playlistId?: string
     userId?: string
+    supportsPrompt?: boolean
   }): Promise<Tool> {
     const entityData = ToolEntity.create({
       name: params.name,
       summary: params.summary,
       website: params.website,
       playlistId: params.playlistId,
+      supportsPrompt: params.supportsPrompt,
     })
 
     const toolData: ToolInsert = {
@@ -28,6 +30,7 @@ export class CreateToolUseCase {
       image: entityData.image,
       tags: entityData.tags,
       website: entityData.website,
+      supports_prompt: entityData.supportsPrompt,
       playlist_id: params.playlistId || null,
       user_id: params.userId || null,
     }

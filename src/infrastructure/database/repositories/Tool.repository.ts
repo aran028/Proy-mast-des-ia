@@ -48,6 +48,16 @@ export class ToolRepository implements IToolRepository {
     return data || []
   }
 
+  async findByPromptSupport(): Promise<Tool[]> {
+    const { data, error } = await this.client
+      .from('tools')
+      .select('*')
+      .eq('supports_prompt', true)
+      .order('created_at', { ascending: false })
+    if (error) throw error
+    return data || []
+  }
+
   async search(query: string): Promise<Tool[]> {
     const escaped = query.replace(/[%_\\]/g, '\\$&')
     const { data, error } = await this.client

@@ -15,6 +15,7 @@ export class UpdateToolUseCase {
     website?: string
     tags?: string[]
     playlistId?: string
+    supportsPrompt?: boolean
   }): Promise<Tool> {
     const existing = await this.toolRepository.findById(id)
     if (!existing) throw new ToolNotFoundException(id)
@@ -30,6 +31,7 @@ export class UpdateToolUseCase {
       ...(data.website !== undefined && { website: data.website }),
       ...(data.tags !== undefined && { tags: data.tags }),
       ...(data.playlistId !== undefined && { playlist_id: data.playlistId }),
+      ...(data.supportsPrompt !== undefined && { supports_prompt: data.supportsPrompt }),
       updated_at: new Date().toISOString(),
     }
 

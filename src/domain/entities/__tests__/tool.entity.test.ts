@@ -10,6 +10,7 @@ const baseData = {
   image: 'chatgpt.png',
   tags: ['nlp', 'chat'],
   website: 'https://chat.openai.com',
+  supportsPrompt: true,
   createdAt: '2024-01-01',
   updatedAt: null,
 }
@@ -56,6 +57,16 @@ describe('ToolEntity', () => {
       expect(() => ToolEntity.create({ name: 'A' })).toThrow(
         'Tool name must be at least 2 characters'
       )
+    })
+
+    it('defaults supportsPrompt to false when not provided', () => {
+      const data = ToolEntity.create({ name: 'LangChain' })
+      expect(data.supportsPrompt).toBe(false)
+    })
+
+    it('accepts supportsPrompt when provided', () => {
+      const data = ToolEntity.create({ name: 'LangChain', supportsPrompt: true })
+      expect(data.supportsPrompt).toBe(true)
     })
   })
 
