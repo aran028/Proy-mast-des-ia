@@ -4,7 +4,7 @@ import type { IToolRepository } from '@/application/ports/repositories'
 
 const mockTool = {
   id: '1', name: 'ChatGPT', summary: null, image: null, website: null,
-  tags: null, playlist_id: 'playlist-1', user_id: null, created_at: '2024-01-01', updated_at: null,
+  tags: null, playlist_id: 'playlist-1', user_id: null, supports_prompt: false, created_at: '2024-01-01', updated_at: null,
 }
 
 const mockRepo: IToolRepository = {

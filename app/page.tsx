@@ -8,7 +8,7 @@ import { HeroSection } from '@/presentation/components/features/hero-section'
 import { PlaylistCards } from '@/presentation/components/features/playlist-card'
 import { ToolGrid } from '@/presentation/components/features/tool-grid'
 import { Skeleton } from '@/presentation/components/ui/skeleton'
-import { usePlaylists, useTools, usePractices, useAuth } from '@/presentation/hooks'
+import { usePlaylists, useTools, useAuth } from '@/presentation/hooks'
 import { VideoGallery } from '@/presentation/components/features/video-gallery'
 
 export default function HomePage() {
@@ -18,8 +18,7 @@ export default function HomePage() {
   const { user } = useAuth()
   const { playlists, loading: loadingPlaylists } = usePlaylists()
   const { tools, loading: loadingTools } = useTools(playlistId || undefined)
-  const { practices, loading: loadingPractices } = usePractices(playlistId || undefined)
-
+  
   const [searchQuery, setSearchQuery] = useState('')
 
   const activePlaylist = playlists.find(p => p.id === playlistId)
