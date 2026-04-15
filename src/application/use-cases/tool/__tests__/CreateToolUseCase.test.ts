@@ -12,6 +12,7 @@ const mockTool = {
   tags: null,
   playlist_id: 'playlist-1',
   user_id: 'user-1',
+  supports_prompt: false,
   created_at: '2024-01-01',
   updated_at: null,
 }
