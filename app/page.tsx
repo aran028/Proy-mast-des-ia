@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Sidebar } from '@/presentation/components/layout/sidebar'
 import { Header } from '@/presentation/components/layout/header'
@@ -11,7 +11,7 @@ import { Skeleton } from '@/presentation/components/ui/skeleton'
 import { usePlaylists, useTools, useAuth } from '@/presentation/hooks'
 import { VideoGallery } from '@/presentation/components/features/video-gallery'
 
-export default function HomePage() {
+function HomeContent() {
   const searchParams = useSearchParams()
   const playlistId = searchParams.get('playlist')
   
@@ -97,5 +97,22 @@ export default function HomePage() {
         </div>
       </main>
     </div>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen bg-black">
+          <Sidebar playlists={[]} />
+          <main className="flex-1 ml-[72px] sm:ml-[240px] lg:ml-[280px] p-6">
+            <Skeleton className="h-64 w-full" />
+          </main>
+        </div>
+      }
+    >
+      <HomeContent />
+    </Suspense>
   )
 }
