@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect} from 'react'
-import { ChevronLeft, ChevronRight,ExternalLink } from 'lucide-react'
+import { ChevronLeft, ChevronRight} from 'lucide-react'
 import type { Tables } from '@/shared/types/database.types'
 import { getPlaylistIconEmoji } from '@/shared/constants/playlist-icons'
 

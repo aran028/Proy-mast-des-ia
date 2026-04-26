@@ -84,8 +84,9 @@ export function Header({ onSearch, user }: HeaderProps) {
     if (mobileSearchOpen) inputRef.current?.focus()
   }, [mobileSearchOpen])
 
-  // Detectar plataforma para el hint visual del atajo
+  // Detectar plataforma para el hint visual del atajo (sync de navigator a state tras hidratación)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMac(/Mac|iPhone|iPad|iPod/i.test(navigator.userAgent))
   }, [])
 
@@ -105,8 +106,9 @@ export function Header({ onSearch, user }: HeaderProps) {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  // Resetear índice activo cuando cambian los resultados
+  // Resetear índice activo cuando cambian los resultados (state derivado de input externo)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveIndex(searchResults.length > 0 ? 0 : -1)
   }, [searchResults])
 

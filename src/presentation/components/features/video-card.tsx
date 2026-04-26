@@ -30,19 +30,6 @@ function getThumbnailUrl(video: Video): string | null {
   return null
 }
 
-function getPlatformColor(platform: string): string {
-  switch (platform) {
-    case 'youtube':
-      return 'bg-red-600/20 text-red-400'
-    case 'instagram':
-      return 'bg-purple-600/20 text-purple-400'
-    case 'tiktok':
-      return 'bg-zinc-600/20 text-zinc-300'
-    default:
-      return 'bg-zinc-600/20 text-zinc-400'
-  }
-}
-
 export function VideoCard({ video, playlistName,playlistColor}: VideoCardProps) {
   const videoUrl = getVideoUrl(video)
   const thumbnailUrl = getThumbnailUrl(video)

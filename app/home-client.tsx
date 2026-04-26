@@ -44,15 +44,16 @@ function HomeContent() {
     breadcrumbItems = [{ label: 'Inicio' }]
   }
 
+  const [shuffleSeed] = useState(() => Math.random())
+
   const featuredTools = useMemo(() => {
     if (tools.length <= 5) return tools
-    const shuffled = [...tools]
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-    }
-    return shuffled.slice(0, 5)
-  }, [tools])
+    return tools
+      .map((tool, i) => ({ tool, key: Math.sin(shuffleSeed * (i + 1)) }))
+      .sort((a, b) => a.key - b.key)
+      .slice(0, 5)
+      .map(({ tool }) => tool)
+  }, [tools, shuffleSeed])
 
   useEffect(() => {
     if (!highlightId || loadingTools) return
