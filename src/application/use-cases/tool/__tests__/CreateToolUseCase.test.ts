@@ -40,6 +40,8 @@ describe('CreateToolUseCase', () => {
     const result = await useCase.execute({
       name: 'ChatGPT',
       summary: 'AI assistant',
+      image: 'https://cdn.example.com/chatgpt.png',
+      tags: ['ai', 'assistant'],
       website: 'https://openai.com',
       playlistId: 'playlist-1',
       userId: 'user-1',
@@ -49,6 +51,8 @@ describe('CreateToolUseCase', () => {
     expect(entitySpy).toHaveBeenCalledWith({
       name: 'ChatGPT',
       summary: 'AI assistant',
+      image: 'https://cdn.example.com/chatgpt.png',
+      tags: ['ai', 'assistant'],
       website: 'https://openai.com',
       playlistId: 'playlist-1',
     })
@@ -83,6 +87,30 @@ describe('CreateToolUseCase', () => {
       website: null,
       supports_prompt: false,
       playlist_id: 'playlist-1',
+      user_id: 'user-1',
+    })
+  })
+
+  it('persists image and normalized tags when provided', async () => {
+    vi.mocked(mockRepo.create).mockResolvedValue(mockTool)
+
+    const useCase = new CreateToolUseCase(mockRepo)
+
+    await useCase.execute({
+      name: 'ChatGPT',
+      image: ' https://cdn.example.com/chatgpt.png ',
+      tags: [' ai ', '', 'assistant'],
+      userId: 'user-1',
+    })
+
+    expect(mockRepo.create).toHaveBeenCalledWith({
+      name: 'ChatGPT',
+      summary: null,
+      image: 'https://cdn.example.com/chatgpt.png',
+      tags: ['ai', 'assistant'],
+      website: null,
+      supports_prompt: false,
+      playlist_id: null,
       user_id: 'user-1',
     })
   })

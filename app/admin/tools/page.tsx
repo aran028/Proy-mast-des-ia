@@ -7,32 +7,52 @@ import type { Tables } from '@/shared/types/database.types'
 import DeleteButton from '@/presentation/components/admin/DeleteButton'
 
 type Tool = Tables<'tools'>
+type Playlist = Tables<'playlists'>
 
 const ITEMS_PER_PAGE = 10
 
 export default function AdminToolsPage() {
   const [tools, setTools] = useState<Tool[]>([])
+  const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [filteredTools, setFilteredTools] = useState<Tool[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    async function loadTools() {
-      try {
-        const res = await fetch('/api/tools')
-        const data = await res.json()
-        if (data.success) {
-          setTools(data.data)
-          setFilteredTools(data.data)
-        }
-      } catch (error) {
-        console.error('Error loading tools:', error)
-      } finally {
-        setLoading(false)
+  const getPlaylistName = (playlistId: string | null) =>
+    playlists.find((playlist) => playlist.id === playlistId)?.name ?? '—'
+
+  async function loadData() {
+    try {
+      setLoading(true)
+
+      const [toolsRes, playlistsRes] = await Promise.all([
+        fetch('/api/tools'),
+        fetch('/api/playlists'),
+      ])
+
+      const [toolsData, playlistsData] = await Promise.all([
+        toolsRes.json(),
+        playlistsRes.json(),
+      ])
+
+      if (toolsData.success) {
+        setTools(toolsData.data)
+        setFilteredTools(toolsData.data)
       }
+
+      if (playlistsData.success) {
+        setPlaylists(playlistsData.data)
+      }
+    } catch (error) {
+      console.error('Error loading admin tools data:', error)
+    } finally {
+      setLoading(false)
     }
-    loadTools()
+  }
+
+  useEffect(() => {
+    loadData()
   }, [])
 
   // Filtrar tools cuando cambia el query de búsqueda
@@ -44,12 +64,13 @@ export default function AdminToolsPage() {
       const filtered = tools.filter(tool => 
         tool.name.toLowerCase().includes(query) ||
         tool.summary?.toLowerCase().includes(query) ||
-        tool.tags?.some(tag => tag.toLowerCase().includes(query))
+        tool.tags?.some(tag => tag.toLowerCase().includes(query)) ||
+        (playlists.find((playlist) => playlist.id === tool.playlist_id)?.name ?? '—').toLowerCase().includes(query)
       )
       setFilteredTools(filtered)
     }
     setCurrentPage(1) // Reset a la primera página al buscar
-  }, [searchQuery, tools])
+  }, [searchQuery, tools, playlists])
 
   // Calcular paginación
   const totalPages = Math.ceil(filteredTools.length / ITEMS_PER_PAGE)
@@ -58,16 +79,7 @@ export default function AdminToolsPage() {
   const currentTools = filteredTools.slice(startIndex, endIndex)
 
   const handleRefresh = () => {
-    setLoading(true)
-    fetch('/api/tools')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setTools(data.data)
-          setFilteredTools(data.data)
-        }
-      })
-      .finally(() => setLoading(false))
+    void loadData()
   }
 
   if (loading) {
@@ -81,10 +93,10 @@ export default function AdminToolsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-white">Tools</h1>
+        <h1 className="text-xl font-bold text-pink-500">Tools</h1>
         <Link href="/admin/tools/new"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md">
-          + Nueva tool
+          className="bg-pink-500 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md">
+          Nueva tool
         </Link>
       </div>
 
@@ -94,13 +106,13 @@ export default function AdminToolsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
           <input
             type="text"
-            placeholder="Buscar por nombre, resumen o tags..."
+            placeholder="Buscar por nombre, playlist, resumen o tags..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 text-white rounded-md text-sm focus:outline-none focus:border-indigo-500"
+            className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 text-white rounded-md text-sm focus:outline-none focus:border-pink-500"
           />
         </div>
-        <p className="text-xs text-zinc-500 mt-2">
+        <p className="text-xs text-pink-500 mt-2">
           Mostrando {filteredTools.length} de {tools.length} tools
         </p>
       </div>
@@ -109,16 +121,18 @@ export default function AdminToolsPage() {
         <table className="w-full text-sm">
           <thead className="border-b border-zinc-800">
             <tr>
-              <th className="text-left text-zinc-400 px-4 py-3">Nombre</th>
-              <th className="text-left text-zinc-400 px-4 py-3">Resumen</th>
-              <th className="text-left text-zinc-400 px-4 py-3">Tags</th>
-              <th className="text-right text-zinc-400 px-4 py-3">Acciones</th>
+              <th className="text-left text-pink-500 px-4 py-3">NOMBRE</th>
+              <th className="text-left text-pink-500 px-4 py-3">PLAYLIST</th>
+              <th className="text-left text-pink-500 px-4 py-3">RESUMEN</th>
+              <th className="text-left text-pink-500 px-4 py-3">TAGS</th>
+              <th className="text-center text-pink-500 px-4 py-3">ACCIONES</th>
             </tr>
           </thead>
           <tbody>
             {currentTools.map(t => (
               <tr key={t.id} className="border-b border-zinc-800 last:border-0">
                 <td className="text-white px-4 py-3">{t.name}</td>
+                <td className="text-white px-4 py-3">{getPlaylistName(t.playlist_id)}</td>
                 <td className="text-zinc-400 px-4 py-3 max-w-md truncate">{t.summary || '—'}</td>
                 <td className="text-zinc-400 px-4 py-3">
                   {t.tags && t.tags.length > 0 ? (
@@ -137,14 +151,16 @@ export default function AdminToolsPage() {
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-4">
                     <Link href={`/admin/tools/${t.id}/edit`}
-                      className="text-indigo-400 hover:text-indigo-300">Editar</Link>
-                    <DeleteButton url={`/api/admin/tools/${t.id}`} onSuccess={handleRefresh} />
+                      className="text-pink-400 hover:text-indigo-300">Editar</Link>
+                    <DeleteButton url={`/api/admi<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  
+n/tools/${t.id}`} onSuccess={handleRefresh} />
                   </div>
                 </td>
               </tr>
             ))}
             {currentTools.length === 0 && (
-              <tr><td colSpan={4} className="text-zinc-500 px-4 py-6 text-center">
+              <tr><td colSpan={5} className="text-zinc-500 px-4 py-6 text-center">
                 {searchQuery ? 'No se encontraron tools' : 'No hay tools'}
               </td></tr>
             )}
@@ -155,20 +171,20 @@ export default function AdminToolsPage() {
       {/* Paginación */}
       {totalPages > 1 && (
         <div className="mt-4 flex items-center justify-between">
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-pink-500">
             Página {currentPage} de {totalPages}
           </p>
           <div className="flex gap-2">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1 bg-zinc-800 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700">
+              className="px-3 py-1 bg-pink-500 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700">
               Anterior
             </button>
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 bg-zinc-800 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700">
+              className="px-3 py-1 bg-pink-500 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700">
               Siguiente
             </button>
           </div>

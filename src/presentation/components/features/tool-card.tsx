@@ -8,11 +8,17 @@ type Tool = Tables<'tools'>
 
 interface ToolCardProps {
   tool: Tool
+  isHighlighted?: boolean
 }
 
-export function ToolCard({ tool }: ToolCardProps) {
+export function ToolCard({ tool, isHighlighted = false }: Readonly<ToolCardProps>) {
   return (
-    <Card className="group cursor-pointer hover:bg-zinc-800 transition-all duration-300 shadow-lg hover:shadow-pink-500/20 overflow-visible">
+    <Card
+      id={`tool-${tool.id}`}
+      className={`group cursor-pointer hover:bg-zinc-800 transition-all duration-300 shadow-lg hover:shadow-pink-500/20 overflow-visible scroll-mt-32 ${
+        isHighlighted ? 'ring-2 ring-pink-500 shadow-pink-500/40' : ''
+      }`}
+    >
       {/* Imagen cuadrada */}
       <div className="relative w-full aspect-square overflow-hidden bg-zinc-800">
         {tool.image && URL.canParse(tool.image) ? (
@@ -46,11 +52,10 @@ export function ToolCard({ tool }: ToolCardProps) {
       <div className="p-3 space-y-1.5">
         {/* Nombre y descripción con tooltip */}
         <div className="relative group/info">
-          <h3 className="font-semibold text-white group-hover:text-pink-500 text-sm leading-tight truncate transition-colors duration-300">
+          <h3 className="font-semibold text-white group-hover:text-pink-500 text-md leading-tight truncate transition-colors duration-300">
             {tool.name}
           </h3>
-
-          <p className="text-xs text-zinc-400 truncate leading-relaxed mt-1">
+          <p className="text-base text-zinc-400 truncate leading-relaxed mt-1">
             {tool.summary}
           </p>
 
@@ -60,8 +65,8 @@ export function ToolCard({ tool }: ToolCardProps) {
               <div className="flex items-start gap-2.5">
                 <Sparkles className="w-4 h-4 text-pink-500 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs font-semibold text-pink-400 mb-1">{tool.name}</p>
-                  <p className="text-xs text-zinc-300 leading-relaxed">{tool.summary}</p>
+                  <p className="text-xs font-semibold text-pink-500 mb-1">{tool.name}</p>
+                  <p className="text-base text-white leading-relaxed">{tool.summary}</p>
                 </div>
               </div>
               {/* Flecha */}
@@ -73,12 +78,12 @@ export function ToolCard({ tool }: ToolCardProps) {
         {/* Tags */}
         {tool.tags && tool.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 pt-1">
-            {tool.tags.slice(0, 2).map((tag) => (
+            {tool.tags.slice(0, 4).map((tag) => (
               <Badge
                 key={tag}
                 variant="secondary"
-                className="text-[10px] px-1.5 py-0 bg-[#0a0a0a] text-zinc-400 group-hover:text-pink-400 transition-colors duration-300"
-              >
+                className="text-[13px] px-1.5 py-0 bg-[#3f3f46] text-pink-500 group-hover:text-white hover:bg-pink-500 transition-colors duration-300"
+              > 
                 {tag}
               </Badge>
             ))}
@@ -88,3 +93,4 @@ export function ToolCard({ tool }: ToolCardProps) {
     </Card>
   )
 }
+   

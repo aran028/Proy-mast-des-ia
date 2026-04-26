@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
@@ -36,6 +37,16 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <Card className="w-full max-w-md p-8">
+        <div className="mb-3 flex justify-center">
+          <Image
+            src="/assets/Logo.png"
+            alt="Logo"
+            width={56}
+            height={56}
+            className="h-14 w-14 object-contain transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_12px_rgba(236,72,153,0.8)] hover:brightness-110 cursor-pointer"
+            priority
+          />
+        </div>
         <h1 className="text-2xl font-bold text-white mb-6 text-center">Iniciar sesión</h1>
         
         <form onSubmit={handleSubmit} className="space-y-4">

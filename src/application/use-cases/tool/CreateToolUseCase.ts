@@ -6,11 +6,13 @@ type Tool = Tables<'tools'>
 type ToolInsert = TablesInsert<'tools'>
 
 export class CreateToolUseCase {
-  constructor(private toolRepository: IToolRepository) {}
+  constructor(private readonly toolRepository: IToolRepository) {}
 
   async execute(params: {
     name: string
     summary?: string
+    image?: string | null
+    tags?: string[]
     website?: string
     playlistId?: string
     userId?: string
@@ -19,6 +21,8 @@ export class CreateToolUseCase {
     const entityData = ToolEntity.create({
       name: params.name,
       summary: params.summary,
+      image: params.image,
+      tags: params.tags,
       website: params.website,
       playlistId: params.playlistId,
       supportsPrompt: params.supportsPrompt,

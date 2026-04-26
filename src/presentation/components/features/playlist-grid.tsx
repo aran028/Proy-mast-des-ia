@@ -13,7 +13,7 @@ export function PlaylistGrid({ playlists }: PlaylistGridProps) {
 
   return (
     <section>
-      <h2 className="text-xl font-bold text-white mb-4">Categorías</h2>
+      <h2 className="text-xl font-bold text-white mb-4">Playlists</h2>
       <PlaylistCards playlists={playlists} />
     </section>
   )

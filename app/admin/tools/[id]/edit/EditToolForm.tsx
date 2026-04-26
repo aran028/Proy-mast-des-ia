@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Upload, X } from 'lucide-react'
 import type { Tables } from '@/shared/types/database.types'
 import Image from 'next/image'
+import { usePlaylists } from '@/presentation/hooks'
 
 type Tool = Tables<'tools'>
 
@@ -12,14 +13,30 @@ interface Props {
   tool: Tool
 }
 
-export default function EditToolForm({ tool }: Props) {
+export default function EditToolForm({ tool }: Readonly<Props>) {
   const router = useRouter()
+  const { playlists, loading: playlistsLoading, error: playlistsError } = usePlaylists()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState(tool.image ?? '')
   const [imagePreview, setImagePreview] = useState(tool.image ?? '')
   const [uploadingImage, setUploadingImage] = useState(false)
   const [supportsPrompt, setSupportsPrompt] = useState(tool.supports_prompt ?? false)
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState(tool.playlist_id ?? '')
+
+  const getStringValue = (value: FormDataEntryValue | null) =>
+    typeof value === 'string' ? value.trim() : ''
+
+  const getValidAbsoluteUrl = (value: string, fieldName: string) => {
+    if (!value) return null
+
+    try {
+      new URL(value)
+      return value
+    } catch {
+      throw new Error(`La URL de ${fieldName} no es válida. Debe empezar con http:// o https://`)
+    }
+  }
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -81,59 +98,38 @@ export default function EditToolForm({ tool }: Props) {
     setImagePreview('')
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  async function handleSubmit(form: HTMLFormElement) {
     setError('')
     setLoading(true)
 
-    const formData = new FormData(e.currentTarget)
-    
-    // Validar y limpiar la URL de imagen
+    const formData = new FormData(form)
     const imageValue = imageUrl.trim()
-    const finalImageUrl = imageValue && imageValue.length > 0 ? imageValue : null
-    
-    // Validar que si hay imagen URL (no data URL), sea una URL válida
-    if (finalImageUrl && !finalImageUrl.startsWith('data:') && finalImageUrl.startsWith('http')) {
-      const isAbsoluteUrl = finalImageUrl.startsWith('http://') || finalImageUrl.startsWith('https://')
-      
-      if (isAbsoluteUrl) {
-        try {
-          new URL(finalImageUrl)
-        } catch {
-          setError('La URL de la imagen no es válida. Debe ser una URL completa (http:// o https://)')
-          setLoading(false)
-          return
-        }
-      }
-    }
+    const finalImageUrl = imageValue.length > 0 ? imageValue : null
+    const websiteValue = getStringValue(formData.get('website'))
+    const tagsValue = getStringValue(formData.get('tags'))
+    const playlistId = getStringValue(formData.get('playlistId'))
 
-    // Validar y limpiar la URL del website
-    const websiteValue = (formData.get('website') as string)?.trim()
-    const websiteUrl = websiteValue && websiteValue.length > 0 ? websiteValue : null
-    
-    if (websiteUrl) {
-      // Website debe ser una URL absoluta
-      try {
-        new URL(websiteUrl)
-      } catch {
-        setError('La URL del website no es válida. Debe empezar con http:// o https://')
-        setLoading(false)
-        return
-      }
-    }
-
-    const body = {
-      name: formData.get('name'),
-      summary: formData.get('summary'),
-      website: websiteUrl,
-      image: finalImageUrl,
-      supportsPrompt,
-      tags: formData.get('tags')
-        ? String(formData.get('tags')).split(',').map(t => t.trim()).filter(Boolean)
-        : [],
+    if (!playlistId) {
+      setError('Debes seleccionar una playlist para la tool')
+      setLoading(false)
+      return
     }
 
     try {
+      const body = {
+        name: formData.get('name'),
+        summary: formData.get('summary'),
+        website: getValidAbsoluteUrl(websiteValue, 'website'),
+        image: finalImageUrl && !finalImageUrl.startsWith('data:')
+          ? getValidAbsoluteUrl(finalImageUrl, 'la imagen')
+          : finalImageUrl,
+        playlistId,
+        supportsPrompt,
+        tags: tagsValue
+          ? tagsValue.split(',').map(t => t.trim()).filter(Boolean)
+          : [],
+      }
+
       const res = await fetch(`/api/admin/tools/${tool.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -155,37 +151,64 @@ export default function EditToolForm({ tool }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {error && (
-        <div className="bg-red-900/50 text-red-400 p-3 rounded-md text-sm">{error}</div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        void handleSubmit(e.currentTarget)
+      }}
+      className="space-y-4"
+    >
+      {(error || playlistsError) && (
+        <div className="bg-red-900/50 text-red-400 p-3 rounded-md text-sm">{error || playlistsError}</div>
       )}
 
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">Nombre *</label>
-        <input name="name" required minLength={2} defaultValue={tool.name}
-          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
+        <label htmlFor="name" className="block text-md text-pink-500 mb-1">Nombre *</label>
+        <input id="name" name="name" required minLength={2} defaultValue={tool.name}
+          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-pink-500" />
       </div>
 
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">Resumen</label>
-        <textarea name="summary" rows={3} defaultValue={tool.summary ?? ''}
-          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
+        <label htmlFor="summary" className="block text-md text-pink-500 mb-1">Resumen</label>
+        <textarea id="summary" name="summary" rows={3} defaultValue={tool.summary ?? ''}
+          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-pink-500" />
       </div>
 
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">Website</label>
+        <label htmlFor="website" className="block text-md text-pink-500 mb-1">Website</label>
         <input 
+          id="website"
           name="website" 
           type="text"
           defaultValue={tool.website ?? ''}
           placeholder="https://ejemplo.com"
-          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" 
+          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-pink-500" 
         />
         <p className="text-xs text-zinc-500 mt-1">Opcional. Debe ser una URL válida si se proporciona.</p>
       </div>
 
       <div>
-        <label className="block text-sm text-zinc-400 mb-2">Imagen</label>
+        <label htmlFor="playlistId" className="block text-md text-pink-500 mb-1">Playlist *</label>
+        <select
+          id="playlistId"
+          name="playlistId"
+          required
+          value={selectedPlaylistId}
+          onChange={(e) => setSelectedPlaylistId(e.target.value)}
+          disabled={playlistsLoading || playlists.length === 0}
+          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-pink-500 disabled:opacity-50"
+        >
+          <option value="">
+            {playlistsLoading ? 'Cargando playlists...' : 'Selecciona una playlist'}
+          </option>
+          {playlists.map((playlist) => (
+            <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="image-url" className="block text-md text-pink-500 mb-2">Imagen</label>
         
         {/* Preview de la imagen */}
         {imagePreview && (URL.canParse(imagePreview) || imagePreview.startsWith('data:')) && (
@@ -226,6 +249,7 @@ export default function EditToolForm({ tool }: Props) {
         {/* Campo de URL manual (alternativa) */}
         <div className="mt-2">
           <input 
+            id="image-url"
             type="text"
             value={imageUrl}
             onChange={(e) => {
@@ -233,7 +257,7 @@ export default function EditToolForm({ tool }: Props) {
               setImagePreview(e.target.value)
             }}
             placeholder="O pega una URL: https://ejemplo.com/imagen.jpg"
-            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" 
+            className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-pink-500" 
           />
         </div>
         
@@ -244,10 +268,10 @@ export default function EditToolForm({ tool }: Props) {
 
       <div>
         {/* Los tags se muestran como string separado por comas para edición fácil */}
-        <label className="block text-sm text-zinc-400 mb-1">Tags (separados por comas)</label>
-        <input name="tags" defaultValue={tool.tags?.join(', ') ?? ''}
+        <label htmlFor="tags" className="block text-md text-pink-500 mb-1">Tags (separados por comas)</label>
+        <input id="tags" name="tags" defaultValue={tool.tags?.join(', ') ?? ''}
           placeholder="AI, Machine Learning, NLP"
-          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
+          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-pink-500" />
       </div>
 
       <div className="flex items-start gap-2 pt-1">
@@ -259,19 +283,20 @@ export default function EditToolForm({ tool }: Props) {
           className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-pink-500 focus:ring-pink-500"
         />
         <label htmlFor="supportsPrompt" className="text-sm text-zinc-300">
-          <span>Esta herramienta funciona con prompts</span>
+          <span className='block text-md text-pink-400' >Esta herramienta funciona con prompts</span>
           <span className="block text-xs text-zinc-500">Marca esta opción si la herramienta acepta prompts de texto. Aparecerá en la sección Prompt Generator.</span>
         </label>
       </div>
 
-      <div className="flex gap-3 pt-2">
+      <div className="flex gap-3 pt-2 justify-center">
         <button type="submit" disabled={loading || uploadingImage}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
+          className="bg-pink-600 hover:bg-pink-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
           {loading ? 'Guardando...' : 'Guardar cambios'}
         </button>
         <button type="button" onClick={() => router.back()}
-          className="text-zinc-400 hover:text-white text-sm px-4 py-2">
-          Cancelar
+
+         className="bg-pink-600 hover:bg-pink-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
+                   Cancelar
         </button>
       </div>
     </form>

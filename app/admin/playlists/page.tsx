@@ -11,10 +11,10 @@ export default async function AdminPlaylistsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-white">Playlists</h1>
+        <h1 className="text-xl font-bold text-pink-500">Playlists</h1>
         <Link href="/admin/playlists/new"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md">
-          + Nueva playlist
+          className="bg-pink-500 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md">
+          Nueva playlist
         </Link>
       </div>
 
@@ -22,19 +22,21 @@ export default async function AdminPlaylistsPage() {
         <table className="w-full text-sm">
           <thead className="border-b border-zinc-800">
             <tr>
-              <th className="text-left text-zinc-400 px-4 py-3">Nombre</th>
-              <th className="text-left text-zinc-400 px-4 py-3">Descripción</th>
-              <th className="text-right text-zinc-400 px-4 py-3">Acciones</th>
+              <th className="text-left text-pink-500 px-4 py-3">ICONO</th>
+              <th className="text-left text-pink-500 px-4 py-3">NOMBRE</th>
+              <th className="text-left text-pink-500 px-4 py-3">DESCRIPCIÓN</th>
+              <th className="text-center text-pink-500 px-4 py-3">ACCIONES</th>
             </tr>
           </thead>
           <tbody>
             {playlists.map(p => (
               <tr key={p.id} className="border-b border-zinc-800 last:border-0">
-                <td className="text-white px-4 py-3">{p.icon} {p.name}</td>
-                <td className="text-zinc-400 px-4 py-3">{p.description || '—'}</td>
+                 <td className="text-white px-4 py-3">{p.icon}</td>
+                <td className="text-white px-4 py-3">{p.name}</td>
+                <td className="text-zinc-600 px-4 py-3">{p.description || '—'}</td>
                 <td className="px-4 py-3 text-right flex items-center justify-end gap-4">
                   <Link href={`/admin/playlists/${p.id}/edit`}
-                    className="text-indigo-400 hover:text-indigo-300">Editar</Link>
+                    className="text-pink-500 hover:text-indigo-400">Editar</Link>
                   {/* DeleteButton es Client Component para manejar el confirm y el fetch DELETE */}
                   <DeleteButton url={`/api/admin/playlists/${p.id}`} />
                 </td>

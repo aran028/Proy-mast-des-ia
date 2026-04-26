@@ -6,7 +6,7 @@ type Tool = Tables<'tools'>
 type ToolUpdate = TablesUpdate<'tools'>
 
 export class UpdateToolUseCase {
-  constructor(private toolRepository: IToolRepository) {}
+  constructor(private readonly toolRepository: IToolRepository) {}
 
   async execute(id: string, data: {
     name?: string

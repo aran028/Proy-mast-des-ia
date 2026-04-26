@@ -13,7 +13,7 @@ export default function AdminPage() {
           <Link key={href} href={href}
             className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 hover:border-pink-600 transition-colors">
             <h2 className="text-pink-500 font-semibold text-lg">{label}</h2>
-            <p className="text-zinc-500 text-sm mt-1">{desc}</p>
+            <p className="text-zinc-100 text-sm mt-1">{desc}</p>
           </Link>
         ))}
       </div>

@@ -78,6 +78,29 @@ describe('CreateVideoUseCase', () => {
     expect(mockRepo.create).not.toHaveBeenCalled()
   })
 
+  it('updates tags on duplicate when incoming tags are provided', async () => {
+    const updatedDuplicate = new VideoEntity({
+      ...mockVideo,
+      tags: ['ai', 'n8n'],
+    })
+    vi.mocked(mockRepo.findByPlatformVideoId).mockResolvedValue(mockVideo)
+    vi.mocked(mockRepo.update).mockResolvedValue(updatedDuplicate)
+
+    const useCase = new CreateVideoUseCase(mockRepo)
+    const result = await useCase.execute({
+      title: 'Test Video',
+      videoUrl: 'https://youtube.com/watch?v=abc123',
+      platform: 'youtube',
+      platformVideoId: 'abc123',
+      tags: ['ai', 'n8n'],
+    })
+
+    expect(result.video).toEqual(updatedDuplicate)
+    expect(result.created).toBe(false)
+    expect(mockRepo.update).toHaveBeenCalledWith(mockVideo.id, { tags: ['ai', 'n8n'] })
+    expect(mockRepo.create).not.toHaveBeenCalled()
+  })
+
   it('throws if title is shorter than 3 characters', async () => {
     vi.mocked(mockRepo.findByPlatformVideoId).mockResolvedValue(null)
 

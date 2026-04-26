@@ -14,6 +14,37 @@ import {
   CreateVideoUseCase,
 } from '@/application/use-cases/video'
 
+function cleanStringArray(values: unknown[]): string[] | undefined {
+  const tags = values
+    .filter((value): value is string => typeof value === 'string')
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+  return tags.length > 0 ? tags : undefined
+}
+
+function normalizeTags(input: unknown): string[] | undefined {
+  if (input == null) return undefined
+
+  if (Array.isArray(input)) return cleanStringArray(input)
+
+  if (typeof input !== 'string') return undefined
+
+  const raw = input.trim()
+  if (!raw) return undefined
+
+  // Accept JSON string payloads from n8n, e.g. "[\"ai\",\"agents\"]".
+  if (raw.startsWith('[') && raw.endsWith(']')) {
+    try {
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed)) return cleanStringArray(parsed)
+    } catch {
+      // Fall back to comma-separated parsing below.
+    }
+  }
+
+  return cleanStringArray(raw.split(','))
+}
+
 export async function GET(request: Request) {
   try {
     const { video: videoRepository } = await createRepositories()
@@ -38,12 +69,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, data: videos })
   } catch (error: unknown) {
     console.error('Error fetching videos:', error)
-    const message =
-      error instanceof Error
-        ? error.message
-        : typeof error === 'object' && error !== null && 'message' in error
-          ? String((error as { message: unknown }).message)
-          : 'Error desconocido'
+    let message = 'Error desconocido'
+    if (error instanceof Error) {
+      message = error.message
+    } else if (typeof error === 'object' && error !== null && 'message' in error) {
+      message = String((error as { message: unknown }).message)
+    }
     return NextResponse.json(
       { success: false, error: message },
       { status: 500 }
@@ -65,9 +96,13 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
+    const normalizedBody = {
+      ...body,
+      tags: normalizeTags(body?.tags),
+    }
     const useCase = new CreateVideoUseCase(videoRepository)
 
-    const { video, created } = await useCase.execute(body)
+    const { video, created } = await useCase.execute(normalizedBody)
 
     return NextResponse.json(video, { status: created ? 201 : 200 })
   } catch (error) {

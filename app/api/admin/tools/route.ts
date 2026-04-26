@@ -15,6 +15,8 @@ export async function POST(request: Request) {
     const result = await new CreateToolUseCase(tool).execute({
       name: body.name,
       summary: body.summary,
+      image: body.image,
+      tags: body.tags,
       website: body.website,
       playlistId: body.playlistId,
       supportsPrompt: body.supportsPrompt,

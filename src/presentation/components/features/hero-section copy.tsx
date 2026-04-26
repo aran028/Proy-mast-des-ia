@@ -3,16 +3,13 @@
 import { useState, useEffect} from 'react'
 import { ChevronLeft, ChevronRight,ExternalLink } from 'lucide-react'
 import type { Tables } from '@/shared/types/database.types'
-import { getPlaylistIconEmoji } from '@/shared/constants/playlist-icons'
 
 type Tool = Tables<'tools'>
-type Playlist = Tables<'playlists'>
 interface HeroSectionProps {
   tools: Tool[]
-  playlists?: Playlist[]
 }
 
-export function HeroSection({ tools, playlists = [] }: HeroSectionProps) {
+export function HeroSection({ tools }: HeroSectionProps) {
   const [current, setCurrent] = useState(0)
 
 
@@ -28,7 +25,6 @@ export function HeroSection({ tools, playlists = [] }: HeroSectionProps) {
 
 
   const featured = tools[current]
-  const featuredPlaylist = playlists.find(p => p.id === featured.playlist_id)
 
   const goTo = (index: number) => {
     setCurrent(index)
@@ -39,27 +35,11 @@ export function HeroSection({ tools, playlists = [] }: HeroSectionProps) {
       <div className="relative px-8 pb-8 pt-10">
         {/* Label */}
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-pink-500 mb-5">
-          {featuredPlaylist ? (
-            <>
-              <span className="text-base leading-none">{getPlaylistIconEmoji(featuredPlaylist.icon)}</span>
-              <span>{featuredPlaylist.name}</span>
-            </>
-          ) : (
-            'TOOLS'
-          )}
+          TOOLS 
         </div>
 
         {/* Content */}
-         {tools.length > 1 && (
-          <div className="mt-8 flex items-center justify-center gap-3">
-            <button
-              onClick={() => goTo((current - 1 + tools.length) % tools.length)}
-              className="flex size-8 items-center justify-center rounded-full border border-zinc-700 text-zinc-400 hover:text-white hover:bg-pink-500 transition-colors"
-              aria-label="Anterior"
-            >
-              <ChevronLeft className="size-20" />
-            </button>
-
+        
         <a
           href={featured.website ?? undefined}
           target="_blank"
@@ -86,29 +66,40 @@ export function HeroSection({ tools, playlists = [] }: HeroSectionProps) {
             )}
           </div>
         </a>
-          <button
+
+        {/* Navigation */}
+        {tools.length > 1 && (
+          <div className="mt-8 flex items-center justify-center gap-3">
+            <button
+              onClick={() => goTo((current - 1 + tools.length) % tools.length)}
+              className="flex size-8 items-center justify-center rounded-full border border-zinc-700 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+              aria-label="Anterior"
+            >
+              <ChevronLeft className="size-5" />
+            </button>
+
+            <div className="flex items-center gap-1.5">
+              {tools.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    i === current ? 'w-6 bg-pink-500' : 'w-2 bg-zinc-700 hover:bg-zinc-600'
+                  }`}
+                  aria-label={`Ir a slide ${i + 1}`}
+                />
+              ))}
+            </div>
+
+            <button
               onClick={() => goTo((current + 1) % tools.length)}
-              className="flex size-8 items-center justify-center rounded-full border border-zinc-700 text-zinc-400 hover:text-white hover:bg-pink-500 transition-colors"
+              className="flex size-8 items-center justify-center rounded-full border border-zinc-700 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
               aria-label="Siguiente"
             >
-              <ChevronRight className="size-20" />
+              <ChevronRight className="size-5" />
             </button>
-          </div>
-        )}
 
-        {/* Navigation dots */}
-        {tools.length > 1 && (
-          <div className="mt-6 flex items-center justify-center gap-1.5">
-            {tools.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goTo(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === current ? 'w-6 bg-pink-500' : 'w-2 bg-zinc-700 hover:bg-zinc-600'
-                }`}
-                aria-label={`Ir a slide ${i + 1}`}
-              />
-            ))}
+
           </div>
         )}
       </div>
