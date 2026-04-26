@@ -41,14 +41,14 @@ export function PromptGeneratorForm({ tool }: PromptGeneratorFormProps) {
           <Sparkles className="w-6 h-6 text-pink-500" />
           Prompt Generator
         </h1>
-        <p className="text-sm text-zinc-400">
+        <p className="text-md text-white mt-4">
           Escribe qué quieres conseguir con <span className="text-pink-400 font-medium">{tool.name}</span> y
           generaremos un prompt optimizado para ti.
         </p>
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        <label htmlFor="intent" className="block text-sm font-medium text-zinc-300">
+        <label htmlFor="intent" className="block text-md font-bold text-pink-500">
           ¿Para qué quieres el prompt?
         </label>
         <textarea

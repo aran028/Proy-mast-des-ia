@@ -21,7 +21,6 @@ interface VideoData {
   viewCount: number | null
   publishedAt: string | null
   tags: string[] | null
-  status: string
   playlistId: string | null
   toolId: string | null
 }
@@ -37,6 +36,7 @@ export default function EditVideoForm({ video }: Props) {
   const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [tools, setTools] = useState<Tool[]>([])
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(video.playlistId ?? '')
+  const [selectedToolId, setSelectedToolId] = useState(video.toolId ?? '')
 
   useEffect(() => {
     fetch('/api/playlists').then(r => r.json()).then(d => {
@@ -50,6 +50,12 @@ export default function EditVideoForm({ video }: Props) {
   const filteredTools = selectedPlaylistId
     ? tools.filter(t => t.playlist_id === selectedPlaylistId)
     : tools
+
+  const parseNullableNumber = (value: FormDataEntryValue | null): number | null => {
+    if (value == null || value === '') return null
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : null
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -66,7 +72,7 @@ export default function EditVideoForm({ video }: Props) {
       thumbnailUrl: formData.get('thumbnailUrl') || null,
       author: formData.get('author') || null,
       authorUrl: formData.get('authorUrl') || null,
-      status: formData.get('status'),
+      viewCount: parseNullableNumber(formData.get('viewCount')),
       playlistId: formData.get('playlistId') || null,
       toolId: formData.get('toolId') || null,
       tags: formData.get('tags')
@@ -102,30 +108,20 @@ export default function EditVideoForm({ video }: Props) {
       )}
 
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">Estado</label>
-        <select name="status" defaultValue={video.status}
-          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
-          <option value="approved">Aprobado</option>
-          <option value="pending">Pendiente</option>
-          <option value="rejected">Rechazado</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm text-zinc-400 mb-1">Título *</label>
+        <label className="block text-sm text-pink-400 mb-1">Título *</label>
         <input name="title" required minLength={3} defaultValue={video.title}
           className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
       </div>
 
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">URL del video *</label>
+        <label className="block text-sm text-pink-400 mb-1">URL del video *</label>
         <input name="videoUrl" required type="url" defaultValue={video.videoUrl}
           className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm text-zinc-400 mb-1">Plataforma</label>
+          <label className="block text-sm text-pink-400 mb-1">Plataforma</label>
           <select name="platform" defaultValue={video.platform}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
             <option value="youtube">YouTube</option>
@@ -134,40 +130,46 @@ export default function EditVideoForm({ video }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-sm text-zinc-400 mb-1">ID de plataforma</label>
+          <label className="block text-sm text-pink-400 mb-1">ID de plataforma</label>
           <input name="platformVideoId" required defaultValue={video.platformVideoId}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">Descripción</label>
+        <label className="block text-sm text-pink-400 mb-1">Descripción</label>
         <textarea name="description" rows={3} defaultValue={video.description ?? ''}
           className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
       </div>
 
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">Thumbnail URL</label>
+        <label className="block text-sm text-pink-400 mb-1">Thumbnail URL</label>
         <input name="thumbnailUrl" type="url" defaultValue={video.thumbnailUrl ?? ''}
           className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm text-zinc-400 mb-1">Autor</label>
+          <label className="block text-sm text-pink-400 mb-1">Autor</label>
           <input name="author" defaultValue={video.author ?? ''}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
         </div>
         <div>
-          <label className="block text-sm text-zinc-400 mb-1">URL del autor</label>
+          <label className="block text-sm text-pink-400 mb-1">URL del autor</label>
           <input name="authorUrl" type="url" defaultValue={video.authorUrl ?? ''}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
         </div>
       </div>
 
+      <div>
+        <label className="block text-sm text-pink-400 mb-1">Nº de visualizaciones</label>
+        <input name="viewCount" type="number" min={0} step={1} defaultValue={video.viewCount ?? ''}
+          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm text-zinc-400 mb-1">Playlist</label>
+          <label className="block text-sm text-pink-400 mb-1">Playlist</label>
           <select name="playlistId"
             value={selectedPlaylistId}
             onChange={(e) => setSelectedPlaylistId(e.target.value)}
@@ -179,8 +181,10 @@ export default function EditVideoForm({ video }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-sm text-zinc-400 mb-1">Tool</label>
-          <select name="toolId" defaultValue={video.toolId ?? ''}
+          <label className="block text-sm text-pink-400 mb-1">Tool</label>
+          <select name="toolId"
+            value={selectedToolId}
+            onChange={(e) => setSelectedToolId(e.target.value)}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
             <option value="">Sin tool</option>
             {filteredTools.map(t => (
@@ -191,18 +195,19 @@ export default function EditVideoForm({ video }: Props) {
       </div>
 
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">Tags (separados por comas)</label>
+        <label className="block text-sm text-pink-400 mb-1">Tags (separados por comas)</label>
         <input name="tags" defaultValue={video.tags?.join(', ') ?? ''}
           className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
       </div>
 
-      <div className="flex gap-3 pt-2">
+      <div className="flex gap-3 pt-2 justify-center">
         <button type="submit" disabled={loading}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
+          className="bg-pink-400 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
           {loading ? 'Guardando...' : 'Guardar cambios'}
         </button>
-        <button type="button" onClick={() => router.back()}
-          className="text-zinc-400 hover:text-white text-sm px-4 py-2">
+        <button type="button" onClick={() => router.back()}        
+          className="bg-pink-400 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
+     
           Cancelar
         </button>
       </div>

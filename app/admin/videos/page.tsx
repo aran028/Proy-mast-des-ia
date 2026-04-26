@@ -92,10 +92,10 @@ export default function AdminVideosPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-white">Videos</h1>
+        <h1 className="text-xl font-bold text-pink-500">Videos</h1>
         <Link href="/admin/videos/new"
-          className="bg-pink-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md">
-          + Nuevo video
+          className="bg-pink-500 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md">
+          Nuevo video
         </Link>
       </div>
 
@@ -123,7 +123,7 @@ export default function AdminVideosPage() {
         </select>
       </div>
 
-      <p className="text-xs text-zinc-500 mb-4">
+      <p className="text-xs text-pink-500 mb-4">
         Mostrando {filteredVideos.length} de {videos.length} videos
       </p>
 
@@ -131,12 +131,12 @@ export default function AdminVideosPage() {
         <table className="w-full text-sm">
           <thead className="border-b border-zinc-800">
             <tr>
-              <th className="text-left text-zinc-400 px-4 py-3">Título</th>
-              <th className="text-left text-zinc-400 px-4 py-3">Plataforma</th>
-              <th className="text-left text-zinc-400 px-4 py-3">Autor</th>
-              <th className="text-left text-zinc-400 px-4 py-3">Estado</th>
-              <th className="text-left text-zinc-400 px-4 py-3">Tags</th>
-              <th className="text-right text-zinc-400 px-4 py-3">Acciones</th>
+              <th className="text-left text-pink-500 px-4 py-3">Título</th>
+              <th className="text-left text-pink-500 px-4 py-3">Plataforma</th>
+              <th className="text-left text-pink-500 px-4 py-3">Autor</th>
+              <th className="text-left text-pink-500 px-4 py-3">Estado</th>
+              <th className="text-left text-pink-500 px-4 py-3">Tags</th>
+              <th className="text-center text-pink-500 px-4 py-3">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -144,12 +144,12 @@ export default function AdminVideosPage() {
               <tr key={v.id} className="border-b border-zinc-800 last:border-0">
                 <td className="text-white px-4 py-3 max-w-xs">
                   <a href={v.video_url} target="_blank" rel="noopener noreferrer"
-                    className="hover:text-indigo-400 line-clamp-1">
+                    className="hover:text-pink-400 line-clamp-1">
                     {v.title}
                   </a>
                 </td>
-                <td className="text-zinc-400 px-4 py-3 uppercase text-xs">{v.platform}</td>
-                <td className="text-zinc-400 px-4 py-3 truncate max-w-[120px]">{v.author || '—'}</td>
+                <td className="text-zinc-100 px-4 py-3 uppercase text-xs">{v.platform}</td>
+                <td className="text-zinc-100 px-4 py-3 truncate max-w-[120px]">{v.author || '—'}</td>
                 <td className="px-4 py-3">
                   <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${STATUS_STYLES[v.status ?? ''] ?? 'bg-zinc-800 text-zinc-400'}`}>
                     {v.status ?? 'sin estado'}
@@ -177,12 +177,7 @@ export default function AdminVideosPage() {
                         Aprobar
                       </button>
                     )}
-                    {v.status !== 'rejected' && (
-                      <button onClick={() => handleStatusChange(v.id, 'rejected')}
-                        className="text-yellow-400 hover:text-yellow-300 text-xs">
-                        Rechazar
-                      </button>
-                    )}
+                   
                     <Link href={`/admin/videos/${v.id}/edit`}
                       className="text-indigo-400 hover:text-indigo-300">Editar</Link>
                     <DeleteButton url={`/api/admin/videos/${v.id}`} onSuccess={loadVideos} />
@@ -201,20 +196,20 @@ export default function AdminVideosPage() {
 
       {totalPages > 1 && (
         <div className="mt-4 flex items-center justify-between">
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-pink-500">
             Página {currentPage} de {totalPages}
           </p>
           <div className="flex gap-2">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1 bg-zinc-800 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700">
+              className="px-3 py-1 bg-pink-500 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700">
               Anterior
             </button>
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 bg-zinc-800 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700">
+              className="px-3 py-1 bg-pink-500 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-700">
               Siguiente
             </button>
           </div>

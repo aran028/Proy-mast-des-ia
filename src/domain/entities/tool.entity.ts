@@ -40,20 +40,25 @@ export class ToolEntity {
   static create(data: {
     name: string
     summary?: string
+    image?: string | null
+    tags?: string[] | null
     website?: string
     playlistId?: string
     supportsPrompt?: boolean
-  }): { playlistId: string | null; userId: null; name: string; summary: string | null; image: null; tags: null; website: string | null; supportsPrompt: boolean } {
+  }): { playlistId: string | null; userId: null; name: string; summary: string | null; image: string | null; tags: string[] | null; website: string | null; supportsPrompt: boolean } {
     if (!data.name || data.name.length < 2) {
       throw new Error('Tool name must be at least 2 characters')
     }
+
+    const normalizedTags = data.tags?.map(tag => tag.trim()).filter(Boolean) ?? null
+
     return {
       playlistId: data.playlistId || null,
       userId: null,
       name: data.name,
       summary: data.summary || null,
-      image: null,
-      tags: null,
+      image: data.image?.trim() || null,
+      tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : null,
       website: data.website || null,
       supportsPrompt: data.supportsPrompt ?? false,
     }

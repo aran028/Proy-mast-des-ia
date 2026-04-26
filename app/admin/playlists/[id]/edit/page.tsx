@@ -20,7 +20,7 @@ export default async function EditPlaylistPage({ params }: Props) {
 
   return (
     <div className="max-w-lg">
-      <h1 className="text-xl font-bold text-white mb-6">Editar playlist</h1>
+      <h1 className="text-xl font-bold text-pink-400 mb-6">Editar playlist</h1>
       <EditPlaylistForm playlist={data} />
     </div>
   )

@@ -5,6 +5,8 @@ import { createRepositories } from '@/infrastructure/config/repository.factory'
 import { PromptGeneratorForm } from '@/presentation/components/features/prompt-generator/prompt-generator-form'
 import { Sidebar } from '@/presentation/components/layout/sidebar'
 import { Header } from '@/presentation/components/layout/header'
+import { Breadcrumb } from '@/presentation/components/layout/breadcrumb'
+import { Footer } from '@/presentation/components/layout/footer'
 import { createClient } from '@/infrastructure/database/supabase/server'
 
 export const dynamic = 'force-dynamic'
@@ -38,6 +40,14 @@ export default async function PromptGeneratorToolPage({ params }: Readonly<PageP
 
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-3xl mx-auto space-y-6">
+            <Breadcrumb
+              items={[
+                { label: 'Inicio', href: '/' },
+                { label: 'Prompt Generator', href: '/prompt-generator' },
+                { label: tool.name },
+              ]}
+            />
+
             <Link
               href="/prompt-generator"
               className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-pink-400 transition-colors"
@@ -47,6 +57,10 @@ export default async function PromptGeneratorToolPage({ params }: Readonly<PageP
             </Link>
 
             <PromptGeneratorForm tool={tool} />
+          </div>
+
+          <div className="max-w-3xl mx-auto mt-12">
+            <Footer />
           </div>
         </div>
       </main>

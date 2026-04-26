@@ -1,7 +1,8 @@
 'use client'
 
-import { useRef } from 'react'
+import { type ReactNode, useMemo, useRef } from 'react'
 import { useVideos } from '@/presentation/hooks/useVideos'
+import { usePlaylists } from '@/presentation/hooks/usePlaylists'
 import { VideoCard } from './video-card'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -9,15 +10,24 @@ interface VideoGalleryProps {
   playlistId?: string
   toolId?: string
   title?: string
+  titleIcon?: ReactNode
 }
 
 export function VideoGallery({
   playlistId,
   toolId,
   title = 'Videos',
-}: VideoGalleryProps) {
+  titleIcon,
+}: Readonly<VideoGalleryProps>) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const { videos, loading, error } = useVideos(playlistId, toolId)
+  const { playlists } = usePlaylists()
+
+const playlistInfoById = useMemo(() => {
+  const map = new Map<string, { name: string; color: string | null }>()
+  for (const p of playlists) map.set(p.id, { name: p.name, color: p.color })
+  return map
+}, [playlists])
 
   const scroll = (direction: 'left' | 'right') => {
     const containerWidth = scrollContainerRef.current?.clientWidth ?? 300
@@ -52,8 +62,11 @@ export function VideoGallery({
     <section className="mt-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-white">{title}</h2>
-        <span className="text-xs text-zinc-500">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-white">
+          {titleIcon && <span aria-hidden="true">{titleIcon}</span>}
+          <span>{title}</span>
+        </h2>
+        <span className="text-md text-pink-400">
           {videos.length} {videos.length === 1 ? 'video' : 'videos'}
         </span>
       </div>
@@ -73,7 +86,12 @@ export function VideoGallery({
           className="flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-smooth px-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {videos.map((video) => (
-            <VideoCard key={video.id} video={video} />
+            <VideoCard
+              key={video.id}
+              video={video}
+              playlistName={video.playlistId ? (playlistInfoById.get(video.playlistId)?.name ?? null) : null}
+             playlistColor={video.playlistId ? (playlistInfoById.get(video.playlistId)?.color ?? null) : null}
+              />
           ))}
         </div>
 

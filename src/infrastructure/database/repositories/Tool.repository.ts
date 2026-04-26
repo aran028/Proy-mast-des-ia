@@ -13,7 +13,7 @@ export class ToolRepository implements IToolRepository {
     const { data, error } = await this.client
       .from('tools')
       .select('*')
-      .order('created_at', { ascending: false })
+      .order('name', { ascending: true })
     if (error) throw error
     return data || []
   }
@@ -33,7 +33,7 @@ export class ToolRepository implements IToolRepository {
       .from('tools')
       .select('*')
       .eq('playlist_id', playlistId)
-      .order('created_at', { ascending: false })
+      .order('name', { ascending: true })
     if (error) throw error
     return data || []
   }
@@ -43,7 +43,7 @@ export class ToolRepository implements IToolRepository {
       .from('tools')
       .select('*')
       .eq('user_id', userId)
-      .order('created_at', { ascending: false })
+      .order('name', { ascending: true })
     if (error) throw error
     return data || []
   }
@@ -53,7 +53,7 @@ export class ToolRepository implements IToolRepository {
       .from('tools')
       .select('*')
       .eq('supports_prompt', true)
-      .order('created_at', { ascending: false })
+      .order('name', { ascending: true })
     if (error) throw error
     return data || []
   }
@@ -64,7 +64,7 @@ export class ToolRepository implements IToolRepository {
       .from('tools')
       .select('*')
       .ilike('name', `%${escaped}%`)
-      .order('created_at', { ascending: false })
+      .order('name', { ascending: true })
     if (error) throw error
     return data || []
   }

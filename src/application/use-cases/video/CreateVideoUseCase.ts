@@ -16,6 +16,12 @@ export interface CreateVideoResult {
 export class CreateVideoUseCase {
   constructor(private readonly videoRepository: VideoRepository) {}
 
+  private areTagsEqual(a: string[] | null, b: string[]): boolean {
+    if (!a) return false
+    if (a.length !== b.length) return false
+    return a.every((tag, index) => tag === b[index])
+  }
+
   async execute(data: {
     title: string
     videoUrl: string
@@ -35,6 +41,11 @@ export class CreateVideoUseCase {
     // Deduplicación: verificar si ya existe
     const existing = await this.videoRepository.findByPlatformVideoId(data.platformVideoId)
     if (existing) {
+      const incomingTags = data.tags?.filter(Boolean)
+      if (incomingTags && incomingTags.length > 0 && !this.areTagsEqual(existing.tags, incomingTags)) {
+        const updated = await this.videoRepository.update(existing.id, { tags: incomingTags })
+        return { video: updated, created: false }
+      }
       return { video: existing, created: false }
     }
 

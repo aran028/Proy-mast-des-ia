@@ -13,7 +13,7 @@ export class PlaylistRepository implements IPlaylistRepository {
     const { data, error } = await this.client
       .from('playlists')
       .select('*')
-      .order('created_at', { ascending: true })
+      .order('name', { ascending: true })
     if (error) throw error
     return data || []
   }

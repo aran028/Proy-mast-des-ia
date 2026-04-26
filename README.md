@@ -157,3 +157,11 @@ El pipeline de GitHub Actions se ejecuta en cada push y pull request a `main` co
 | **Lint & Type-check** | `tsc --noEmit`, `eslint`, `pnpm audit` |
 | **Test** | `vitest run` |
 
+## Integración Git de Vercel
+                                                                              
+  1. https://vercel.com/new → importa tu repo de GitHub.
+  2. Vercel detecta Next.js automáticamente.
+  3. Añade las env vars (NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY, etc.) en Project Settings → Environment      
+  Variables.
+  4. Cada push a main → deploy a producción. Cada PR → preview deploy. 
