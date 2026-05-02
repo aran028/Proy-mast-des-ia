@@ -9,7 +9,6 @@ export interface IToolRepository {
   findAll(): Promise<Tool[]>
   findById(id: string): Promise<Tool | null>
   findByPlaylistId(playlistId: string): Promise<Tool[]>
-  findByUserId(userId: string): Promise<Tool[]>
   findByPromptSupport(): Promise<Tool[]>
   search(query: string): Promise<Tool[]>
   create(data: ToolInsert): Promise<Tool>

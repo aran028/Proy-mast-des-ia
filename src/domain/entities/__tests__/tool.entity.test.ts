@@ -68,6 +68,29 @@ describe('ToolEntity', () => {
       const data = ToolEntity.create({ name: 'LangChain', supportsPrompt: true })
       expect(data.supportsPrompt).toBe(true)
     })
+
+    it('rejects website with javascript: protocol', () => {
+      expect(() =>
+        ToolEntity.create({ name: 'Evil', website: 'javascript:alert(1)' }),
+      ).toThrow('Tool website must use http or https')
+    })
+
+    it('rejects website with data: protocol', () => {
+      expect(() =>
+        ToolEntity.create({ name: 'Evil', website: 'data:text/html,<script>alert(1)</script>' }),
+      ).toThrow('Tool website must use http or https')
+    })
+
+    it('rejects malformed website URL', () => {
+      expect(() =>
+        ToolEntity.create({ name: 'Evil', website: 'not a url' }),
+      ).toThrow('Tool website must be a valid URL')
+    })
+
+    it('treats empty website as null', () => {
+      const data = ToolEntity.create({ name: 'LangChain', website: '   ' })
+      expect(data.website).toBeNull()
+    })
   })
 
   describe('getTags', () => {

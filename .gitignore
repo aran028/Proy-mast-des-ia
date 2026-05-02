@@ -45,3 +45,7 @@ next-env.d.ts
 
 #Configuracion de scrapper de Youtube
 YouTube Video Scraper.json
+
+# Supabase CLI scratch (no contiene migraciones — solo estado local del CLI)
+/supabase/.temp/
+

@@ -1,9 +1,9 @@
 'use client'
-
 // Client Component reutilizable para eliminar cualquier recurso admin
 // Recibe la URL de la API route y hace DELETE con confirmación
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { Trash2, Loader2 } from 'lucide-react';
 
 interface Props {
   url: string
@@ -36,9 +36,19 @@ export default function DeleteButton({ url, label = 'Eliminar', onSuccess }: Pro
   }
 
   return (
-    <button onClick={handleDelete} disabled={loading}
-      className="text-red-400 hover:text-red-300 disabled:opacity-50">
-      {loading ? '...' : label}
+    <button
+    onClick={handleDelete} 
+      disabled={loading}
+      className="p-2 rounded-md text-red-500 hover:bg-red-500/10 hover:text-red-400 transition-all disabled:opacity-50"
+      title={label}
+    >
+      {loading ? (
+        <Loader2 className="size-4 animate-spin" /> // Icono de carga girando
+      ) : (
+        <Trash2 className="size-4" /> // Icono de basura
+      )}
+      <span className="sr-only">{label}</span>
+
     </button>
   )
 }

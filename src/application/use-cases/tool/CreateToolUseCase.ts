@@ -15,7 +15,6 @@ export class CreateToolUseCase {
     tags?: string[]
     website?: string
     playlistId?: string
-    userId?: string
     supportsPrompt?: boolean
   }): Promise<Tool> {
     const entityData = ToolEntity.create({
@@ -35,8 +34,7 @@ export class CreateToolUseCase {
       tags: entityData.tags,
       website: entityData.website,
       supports_prompt: entityData.supportsPrompt,
-      playlist_id: params.playlistId || null,
-      user_id: params.userId || null,
+      playlist_id: params.playlistId || null    
     }
 
     return this.toolRepository.create(toolData)

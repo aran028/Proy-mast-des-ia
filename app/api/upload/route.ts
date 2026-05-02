@@ -1,85 +1,78 @@
 import { NextResponse } from 'next/server'
+import { randomBytes } from 'node:crypto'
 import { createServiceClient } from '@/infrastructure/database/supabase/server'
 import { verifyAdmin } from '@/infrastructure/config/admin.guard'
+import { detectImage } from '@/infrastructure/security/image-validator'
+
+export const runtime = 'nodejs'
+
+const MAX_BYTES = 5 * 1024 * 1024
 
 export async function POST(request: Request) {
   try {
     const admin = await verifyAdmin()
     if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    // 1. Obtener el archivo del FormData
     const formData = await request.formData()
-    const file = formData.get('file') as File
+    const file = formData.get('file')
 
-    if (!file) {
+    if (!(file instanceof File)) {
       return NextResponse.json(
         { success: false, error: 'No se proporcionó ningún archivo' },
-        { status: 400 }
+        { status: 400 },
       )
     }
 
-    // 2. Validar que sea una imagen
-    if (!file.type.startsWith('image/')) {
-      return NextResponse.json(
-        { success: false, error: 'El archivo debe ser una imagen' },
-        { status: 400 }
-      )
-    }
-
-    // 3. Validar tamaño (máximo 5MB)
-    const maxSize = 5 * 1024 * 1024
-    if (file.size > maxSize) {
+    if (file.size > MAX_BYTES) {
       return NextResponse.json(
         { success: false, error: 'La imagen no debe superar los 5MB' },
-        { status: 400 }
+        { status: 400 },
       )
     }
 
-    // 4. Generar nombre único para el archivo
-    const timestamp = Date.now()
-    const random = Math.random().toString(36).substring(7)
-    const extension = file.name.split('.').pop()
-    const fileName = `${timestamp}-${random}.${extension}`
+    const buffer = Buffer.from(await file.arrayBuffer())
 
-    // 5. Convertir el archivo a ArrayBuffer
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
+    // Validar el tipo real por firma binaria — nunca confiar en file.type ni file.name.
+    const detected = detectImage(buffer)
+    if (!detected) {
+      return NextResponse.json(
+        { success: false, error: 'Formato no permitido. Usa PNG, JPG, WEBP o GIF.' },
+        { status: 400 },
+      )
+    }
 
-    // 6. Cliente con Service Role Key (necesario para Storage)
+    // Nombre 100% generado en servidor: extensión y mime los pone el detector,
+    // no el cliente. Imposible que se cuele un .html / .svg con MIME spoofeado.
+    const fileName = `${Date.now()}-${randomBytes(8).toString('hex')}.${detected.ext}`
+
     const supabase = createServiceClient()
 
-    // 7. Subir el archivo a Supabase Storage
     const { error } = await supabase.storage
       .from('tools-images')
       .upload(fileName, buffer, {
-        contentType: file.type,
+        contentType: detected.mime,
         cacheControl: '3600',
         upsert: false,
       })
 
     if (error) {
+      console.error('[upload] storage error:', error)
       return NextResponse.json(
-        { success: false, error: `Error al subir la imagen: ${error.message}` },
-        { status: 500 }
+        { success: false, error: 'No se pudo subir la imagen' },
+        { status: 500 },
       )
     }
 
-    // 8. Obtener la URL pública
     const { data: { publicUrl } } = supabase.storage
       .from('tools-images')
       .getPublicUrl(fileName)
 
-    return NextResponse.json({
-      success: true,
-      url: publicUrl,
-      fileName: fileName,
-    })
-
+    return NextResponse.json({ success: true, url: publicUrl, fileName })
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Error desconocido'
+    console.error('[upload] error:', error)
     return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
+      { success: false, error: 'Error desconocido' },
+      { status: 500 },
     )
   }
 }

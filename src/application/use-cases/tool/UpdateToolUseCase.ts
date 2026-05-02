@@ -1,6 +1,7 @@
 import type { IToolRepository } from '@/application/ports/repositories'
 import type { Tables, TablesUpdate } from '@/shared/types/database.types'
 import { ToolNotFoundException } from '@/domain/exceptions'
+import { ToolEntity } from '@/domain/entities/tool.entity'
 
 type Tool = Tables<'tools'>
 type ToolUpdate = TablesUpdate<'tools'>
@@ -24,11 +25,14 @@ export class UpdateToolUseCase {
       throw new Error('Tool name must be at least 2 characters')
     }
 
+    const normalizedWebsite =
+      data.website === undefined ? undefined : ToolEntity.normalizeWebsite(data.website)
+
     const updateData: ToolUpdate = {
       ...(data.name !== undefined && { name: data.name }),
       ...(data.summary !== undefined && { summary: data.summary }),
       ...(data.image !== undefined && { image: data.image }),
-      ...(data.website !== undefined && { website: data.website }),
+      ...(normalizedWebsite !== undefined && { website: normalizedWebsite }),
       ...(data.tags !== undefined && { tags: data.tags }),
       ...(data.playlistId !== undefined && { playlist_id: data.playlistId }),
       ...(data.supportsPrompt !== undefined && { supports_prompt: data.supportsPrompt }),

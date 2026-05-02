@@ -104,10 +104,10 @@ export function Sidebar({ playlists, activePlaylist }: Readonly<SidebarProps>) {
             <Link
               href="/prompt-generator"
               className={`flex items-center gap-4 rounded-lg p-3 transition-all ${
-                pathname.startsWith('/prompt-generator') ? 'bg-zinc-800 text-white' : 'text-white hover:text-pink-500 hover:bg-zinc-800'
+                pathname.startsWith('/prompt-generator') ? 'bg-zinc-800 text-white' : 'text-white hover:text-pink-500 hover:bg-zinc-800 hover:scale-110'
               }`}
             >
-              <Sparkles className="size-6 shrink-0 text-white hover:text-pink-500" />
+              <Sparkles className="size-6 shrink-0 text-white hover:text-pink-500 hover:scale-110" />
               <span className="hidden sm:inline text-sm font-semibold">Prompt Generator</span>      
             </Link>
           </li>
@@ -115,10 +115,10 @@ export function Sidebar({ playlists, activePlaylist }: Readonly<SidebarProps>) {
             <Link
               href="/?section=latest-youtube-videos#latest-youtube-videos"
               className={`flex items-center gap-4 rounded-lg p-3 transition-all ${
-                isYoutubeSectionActive ? 'bg-zinc-800 text-white' : 'text-white hover:text-pink-500 hover:bg-zinc-800'
+                isYoutubeSectionActive ? 'bg-zinc-800 text-white' : 'text-white hover:text-pink-500 hover:bg-zinc-800 hover:scale-110'
               }`}
             >
-              <PlayCircle className="size-6 shrink-0 text-red-500 hover:text-pink-500" />
+              <PlayCircle className="size-6 shrink-0 text-red-500 hover:text-pink-500 hover:scale-110" />
               <span className="hidden sm:inline text-sm font-semibold">Vídeos de Youtube</span>
             </Link>
           </li>
@@ -136,7 +136,7 @@ export function Sidebar({ playlists, activePlaylist }: Readonly<SidebarProps>) {
             className={`flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors sm:justify-start ${
               view === 'playlists'
                 ? 'bg-zinc-800 text-white'
-                : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-pink-500'
+                : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-pink-500 hover:scale-110'
             }`}
           >
             <Library className="size-5 shrink-0" />
@@ -150,7 +150,7 @@ export function Sidebar({ playlists, activePlaylist }: Readonly<SidebarProps>) {
             className={`flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors sm:justify-start ${
               view === 'tools'
                 ? 'bg-zinc-800 text-white'
-                : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-pink-500'
+                : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-pink-500 hover:scale-110'
             }`}
           >
             <ToolboxIcon className="size-5 shrink-0" />
@@ -202,9 +202,19 @@ export function Sidebar({ playlists, activePlaylist }: Readonly<SidebarProps>) {
                   <p className="truncate text-sm font-semibold text-white transition-colors group-hover:text-pink-500">{playlist.name}</p>
                 </div>
 
-                <span className="pointer-events-none absolute left-12 right-2 top-1/2 z-20 hidden -translate-y-1/2 rounded-md border border-zinc-600/60 bg-zinc-900/95 px-2 py-1 text-xs font-medium text-pink-400 shadow-lg backdrop-blur-sm group-hover:sm:block">
-                  {playlist.name}
-                </span>
+<span
+  className="
+    pointer-events-none absolute left-12 top-1/2 -translate-y-1/2
+    z-20 hidden group-hover:block
+    rounded-md border border-pink-500/30
+    bg-zinc-900/95 px-2 py-1
+    text-md font-bold text-pink-500
+    shadow-[0_0_8px_#f472b6] backdrop-blur-sm
+    transition-all duration-200
+    opacity-0 group-hover:opacity-100
+  ">
+  {playlist.name}
+</span>               
               </Link>
             )
           })}

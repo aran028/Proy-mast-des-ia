@@ -46,3 +46,38 @@ export class PromptGenerationException extends DomainException {
     this.name = 'PromptGenerationException'
   }
 }
+
+export class EmbeddingFailedException extends DomainException {
+  constructor(message: string) {
+    super(`Embedding generation failed: ${message}`)
+    this.name = 'EmbeddingFailedException'
+  }
+}
+
+export class RetrievalFailedException extends DomainException {
+  constructor(message: string) {
+    super(`Vector retrieval failed: ${message}`)
+    this.name = 'RetrievalFailedException'
+  }
+}
+
+export class ChatGenerationException extends DomainException {
+  constructor(message: string) {
+    super(`Chat generation failed: ${message}`)
+    this.name = 'ChatGenerationException'
+  }
+}
+
+export class DocumentNotFoundException extends DomainException {
+  constructor(id: string) {
+    super(`Document with id ${id} not found`)
+    this.name = 'DocumentNotFoundException'
+  }
+}
+
+export class UnsupportedDocumentTypeException extends DomainException {
+  constructor(mimeType: string) {
+    super(`Unsupported document mime type: ${mimeType}`)
+    this.name = 'UnsupportedDocumentTypeException'
+  }
+}

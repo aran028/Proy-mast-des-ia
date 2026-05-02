@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Search } from 'lucide-react'
+import { Search,Pencil, Plus } from 'lucide-react'
 import type { Tables } from '@/shared/types/database.types'
 import DeleteButton from '@/presentation/components/admin/DeleteButton'
 
@@ -55,8 +55,7 @@ export default function AdminVideosPage() {
       filtered = filtered.filter(v =>
         v.title.toLowerCase().includes(query) ||
         v.author?.toLowerCase().includes(query) ||
-        v.platform.toLowerCase().includes(query) ||
-        v.tags?.some(tag => tag.toLowerCase().includes(query))
+        v.platform.toLowerCase().includes(query) 
       )
     }
 
@@ -94,7 +93,8 @@ export default function AdminVideosPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-pink-500">Videos</h1>
         <Link href="/admin/videos/new"
-          className="bg-pink-500 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md">
+          className="bg-pink-500 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md flex items-center gap-2 transition-colors font-medium shadow-lg shadow-pink-500/20">
+             <Plus className="size-4" />    
           Nuevo video
         </Link>
       </div>
@@ -111,16 +111,7 @@ export default function AdminVideosPage() {
             className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 text-white rounded-md text-sm focus:outline-none focus:border-pink-500"
           />
         </div>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500"
-        >
-          <option value="all">Todos los estados</option>
-          <option value="approved">Aprobados</option>
-          <option value="pending">Pendientes</option>
-          <option value="rejected">Rechazados</option>
-        </select>
+        
       </div>
 
       <p className="text-xs text-pink-500 mb-4">
@@ -131,12 +122,11 @@ export default function AdminVideosPage() {
         <table className="w-full text-sm">
           <thead className="border-b border-zinc-800">
             <tr>
-              <th className="text-left text-pink-500 px-4 py-3">Título</th>
-              <th className="text-left text-pink-500 px-4 py-3">Plataforma</th>
-              <th className="text-left text-pink-500 px-4 py-3">Autor</th>
-              <th className="text-left text-pink-500 px-4 py-3">Estado</th>
-              <th className="text-left text-pink-500 px-4 py-3">Tags</th>
-              <th className="text-center text-pink-500 px-4 py-3">Acciones</th>
+              <th className="text-left text-pink-500 px-4 py-3 uppercase">Título</th>
+              <th className="text-left text-pink-500 px-4 py-3 uppercase">Plataforma</th>
+              <th className="text-left text-pink-500 px-4 py-3 uppercase">Autor</th>
+              <th className="text-left text-pink-500 px-4 py-3 uppercase">Estado</th>
+              <th className="text-center text-pink-500 px-4 py-3 uppercase">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -155,20 +145,7 @@ export default function AdminVideosPage() {
                     {v.status ?? 'sin estado'}
                   </span>
                 </td>
-                <td className="text-zinc-400 px-4 py-3">
-                  {v.tags && v.tags.length > 0 ? (
-                    <div className="flex flex-wrap gap-1">
-                      {v.tags.slice(0, 2).map(tag => (
-                        <span key={tag} className="inline-block bg-zinc-800 px-2 py-0.5 rounded text-xs">
-                          {tag}
-                        </span>
-                      ))}
-                      {v.tags.length > 2 && (
-                        <span className="text-xs text-zinc-500">+{v.tags.length - 2}</span>
-                      )}
-                    </div>
-                  ) : '—'}
-                </td>
+                
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-3">
                     {v.status !== 'approved' && (
@@ -179,8 +156,12 @@ export default function AdminVideosPage() {
                     )}
                    
                     <Link href={`/admin/videos/${v.id}/edit`}
-                      className="text-indigo-400 hover:text-indigo-300">Editar</Link>
-                    <DeleteButton url={`/api/admin/videos/${v.id}`} onSuccess={loadVideos} />
+ className="p-2 rounded-md text-zinc-400 hover:text-pink-500 hover:bg-zinc-800 transition-colors"
+      title="Editar playlist">
+        <Pencil className="size-4" />
+      <span className="sr-only">Editar</span> {/* Para accesibilidad (lectores de pantalla) */}
+      </Link>
+               <DeleteButton url={`/api/admin/videos/${v.id}`} onSuccess={loadVideos} />
                   </div>
                 </td>
               </tr>

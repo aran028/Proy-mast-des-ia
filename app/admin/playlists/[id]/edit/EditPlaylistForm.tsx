@@ -140,11 +140,11 @@ export default function EditPlaylistForm({ playlist }: Readonly<Props>) {
 
       <div className="flex gap-3 pt-2 justify-center">
         <button type="submit" disabled={loading}
-          className="bg-pink-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
-          {loading ? 'Guardando...' : 'Guardar cambios'}
+          className="bg-pink-500 hover:bg-indigo-700 hover:text-pink-500 hover:scale-110 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
+          {loading ? 'Guardando...' : 'Guardar'}
         </button>
         <button type="button" onClick={() => router.back()}
-          className="bg-pink-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
+          className="bg-pink-500 hover:bg-indigo-700 hover:text-pink-500 hover:scale-110 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
           Cancelar
         </button>
       </div>

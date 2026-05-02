@@ -59,9 +59,32 @@ export class ToolEntity {
       summary: data.summary || null,
       image: data.image?.trim() || null,
       tags: normalizedTags && normalizedTags.length > 0 ? normalizedTags : null,
-      website: data.website || null,
+      website: ToolEntity.normalizeWebsite(data.website),
       supportsPrompt: data.supportsPrompt ?? false,
     }
+  }
+
+  // Solo permite http(s). Bloquea javascript:, data:, vbscript:, file:, etc.
+  // Devuelve null si la URL es vacía/null; lanza si no es válida o usa otro esquema.
+  static normalizeWebsite(url: string | null | undefined): string | null {
+    if (url == null) return null
+    const trimmed = url.trim()
+    if (!trimmed) return null
+
+    let parsed: URL
+    try {
+      parsed = new URL(trimmed)
+    } catch {
+      throw new Error('Tool website must be a valid URL')
+    }
+
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      throw new Error('Tool website must use http or https')
+    }
+
+    // Devolvemos el string original (trimmed) para no canonicalizar (la URL
+    // canónica añade trailing slash al host raíz y eso modificaría datos en BD).
+    return trimmed
   }
 
   getTags(): string[] {

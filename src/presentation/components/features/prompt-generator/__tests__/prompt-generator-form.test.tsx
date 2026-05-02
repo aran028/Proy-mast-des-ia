@@ -1,11 +1,26 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { PromptGeneratorForm } from '../prompt-generator-form'
 import type { Tables } from '@/shared/types/database.types'
+import type { GeneratedPrompt } from '@/presentation/hooks/useGeneratePrompt'
 
 type Tool = Tables<'tools'>
 
-const mockTool = {
+type HookState = {
+  data: GeneratedPrompt | null
+  isLoading: boolean
+  error: string | null
+}
+
+const generate = vi.fn()
+const reset = vi.fn()
+let hookState: HookState = { data: null, isLoading: false, error: null }
+
+vi.mock('@/presentation/hooks/useGeneratePrompt', () => ({
+  useGeneratePrompt: () => ({ ...hookState, generate, reset }),
+}))
+
+const mockTool: Tool = {
   id: 'tool-1',
   name: 'ChatGPT',
   summary: 'AI assistant',
@@ -13,73 +28,77 @@ const mockTool = {
   tags: null,
   website: 'https://chat.openai.com',
   supports_prompt: true,
-  playlist_id: null,
-  user_id: null,
-  created_at: '2024-01-01',
-} as Tool
+  playlist_id: 'p1',
+  created_at: '2026-01-01',
+  updated_at: null,
+}
 
 describe('PromptGeneratorForm', () => {
-  const fetchMock = vi.fn()
-
   beforeEach(() => {
-    vi.stubGlobal('fetch', fetchMock)
-    const clipboard = { writeText: vi.fn().mockResolvedValue(undefined) }
-    Object.defineProperty(navigator, 'clipboard', { value: clipboard, configurable: true })
-  })
-
-  afterEach(() => {
-    vi.unstubAllGlobals()
     vi.clearAllMocks()
+    hookState = { data: null, isLoading: false, error: null }
   })
 
-  it('renders the tool name and form', () => {
+  it('renders the tool name and the submit button disabled by default', () => {
     render(<PromptGeneratorForm tool={mockTool} />)
-    expect(screen.getByText(/ChatGPT/)).toBeInTheDocument()
-    expect(screen.getByLabelText(/para qué quieres el prompt/i)).toBeInTheDocument()
+    expect(screen.getByText('ChatGPT')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /generar/i })).toBeDisabled()
   })
 
-  it('disables the submit button until intent is long enough', () => {
+  it('keeps the button disabled while the intent is shorter than 10 chars', () => {
     render(<PromptGeneratorForm tool={mockTool} />)
+    const textarea = screen.getByLabelText(/¿para qué quieres el prompt\?/i)
+    fireEvent.change(textarea, { target: { value: 'corto' } })
+    expect(screen.getByRole('button', { name: /generar/i })).toBeDisabled()
+  })
+
+  it('calls generate with toolId and trimmed intent on submit', async () => {
+    render(<PromptGeneratorForm tool={mockTool} />)
+    const textarea = screen.getByLabelText(/¿para qué quieres el prompt\?/i)
+    fireEvent.change(textarea, {
+      target: { value: '   un email profesional para un reembolso   ' },
+    })
+
     const button = screen.getByRole('button', { name: /generar/i })
-    expect(button).toBeDisabled()
+    expect(button).toBeEnabled()
+    fireEvent.click(button)
 
-    const textarea = screen.getByLabelText(/para qué quieres el prompt/i)
-    fireEvent.change(textarea, { target: { value: 'too short' } })
-    expect(button).toBeDisabled()
-
-    fireEvent.change(textarea, { target: { value: 'this is a long enough intent to be valid' } })
-    expect(button).not.toBeDisabled()
+    await waitFor(() => {
+      expect(generate).toHaveBeenCalledWith({
+        toolId: 'tool-1',
+        userIntent: 'un email profesional para un reembolso',
+      })
+    })
   })
 
-  it('submits and renders the generated prompt with copy button', async () => {
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        success: true,
-        data: {
-          prompt: 'Generated prompt content',
-          model: 'claude-sonnet-4-5',
-          toolName: 'ChatGPT',
-          toolWebsite: 'https://chat.openai.com',
-        },
-      }),
-    })
-
+  it('shows the loading state when isLoading is true', () => {
+    hookState = { data: null, isLoading: true, error: null }
     render(<PromptGeneratorForm tool={mockTool} />)
-    fireEvent.change(screen.getByLabelText(/para qué quieres el prompt/i), {
-      target: { value: 'Write a short story about a lonely robot' },
-    })
-    fireEvent.click(screen.getByRole('button', { name: /generar/i }))
+    expect(screen.getByText(/generando/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /generando/i })).toBeDisabled()
+  })
 
-    await waitFor(() => {
-      expect(screen.getByText('Generated prompt content')).toBeInTheDocument()
-    })
+  it('renders the error message when the hook reports one', () => {
+    hookState = { data: null, isLoading: false, error: 'Tool not prompt-enabled' }
+    render(<PromptGeneratorForm tool={mockTool} />)
+    expect(screen.getByText('Tool not prompt-enabled')).toBeInTheDocument()
+  })
 
-    fireEvent.click(screen.getByRole('button', { name: /copiar/i }))
-    await waitFor(() => {
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('Generated prompt content')
-    })
-    expect(await screen.findByText(/copiado/i)).toBeInTheDocument()
+  it('renders the generated prompt and an external link to the tool website', () => {
+    hookState = {
+      data: {
+        prompt: 'Tu prompt generado',
+        model: 'claude-sonnet-4-5',
+        toolName: 'ChatGPT',
+        toolWebsite: 'https://chat.openai.com',
+      },
+      isLoading: false,
+      error: null,
+    }
+    render(<PromptGeneratorForm tool={mockTool} />)
+
+    expect(screen.getByText('Tu prompt generado')).toBeInTheDocument()
+    expect(screen.getByText('claude-sonnet-4-5')).toBeInTheDocument()
 
     const link = screen.getByRole('link', { name: /probar en chatgpt/i })
     expect(link).toHaveAttribute('href', 'https://chat.openai.com')
@@ -87,18 +106,30 @@ describe('PromptGeneratorForm', () => {
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
-  it('shows an error message when the API fails', async () => {
-    fetchMock.mockResolvedValue({
-      ok: false,
-      json: async () => ({ success: false, error: 'Tool does not support prompt' }),
+  it('copies the generated prompt to the clipboard when Copy is clicked', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined)
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
     })
 
+    hookState = {
+      data: {
+        prompt: 'Texto a copiar',
+        model: 'claude-sonnet-4-5',
+        toolName: 'ChatGPT',
+        toolWebsite: null,
+      },
+      isLoading: false,
+      error: null,
+    }
     render(<PromptGeneratorForm tool={mockTool} />)
-    fireEvent.change(screen.getByLabelText(/para qué quieres el prompt/i), {
-      target: { value: 'This is a valid intent string' },
-    })
-    fireEvent.click(screen.getByRole('button', { name: /generar/i }))
 
-    expect(await screen.findByText(/tool does not support prompt/i)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /copiar/i }))
+
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalledWith('Texto a copiar')
+    })
+    expect(await screen.findByText(/copiado/i)).toBeInTheDocument()
   })
 })

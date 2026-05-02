@@ -22,7 +22,7 @@ export function Footer() {
             height={32}
             className="rounded-full border border-zinc-700 group-hover:border-pink-500 transition-colors"
           />
-          <span>Mi proyecto del Master de Desarrollo con IA </span>
+          <span>Mi proyecto del Master de Desarrollo con IA en GitHub</span>
         </Link>
         <Link
           href="https://thebigschool.com/"
@@ -38,8 +38,8 @@ export function Footer() {
             height={32}
             className="h-8 w-auto object-contain"
           />
-        </Link>
-        <p>© 2026 Aranzazu Foronda</p>
+        </Link>        
+        <p className="text-sm text-zinc-400 hover:text-pink-500 transition-colors">© 2026 Aranzazu Foronda</p>
       </div>
     </footer>
   )

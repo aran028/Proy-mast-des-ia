@@ -14,7 +14,6 @@ const mockTool: Tool = {
   website: 'https://chat.openai.com',
   supports_prompt: true,
   playlist_id: 'p1',
-  user_id: null,
   created_at: '2026-01-01',
   updated_at: null,
 }

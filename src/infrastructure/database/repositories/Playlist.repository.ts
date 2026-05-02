@@ -28,16 +28,6 @@ export class PlaylistRepository implements IPlaylistRepository {
     return data
   }
 
-  async findByUserId(userId: string): Promise<Playlist[]> {
-    const { data, error } = await this.client
-      .from('playlists')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-    if (error) throw error
-    return data || []
-  }
-
   async create(data: PlaylistInsert): Promise<Playlist> {
     const { data: playlist, error } = await this.client
       .from('playlists')

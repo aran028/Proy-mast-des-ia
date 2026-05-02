@@ -14,7 +14,6 @@ const baseTool = (overrides: Partial<Tool>): Tool => ({
   website: null,
   supports_prompt: false,
   playlist_id: null,
-  user_id: null,
   created_at: '2026-01-01',
   updated_at: null,
   ...overrides,
