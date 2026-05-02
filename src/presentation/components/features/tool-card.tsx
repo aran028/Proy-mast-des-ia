@@ -55,7 +55,7 @@ export function ToolCard({ tool, isHighlighted = false }: Readonly<ToolCardProps
           <h3 className="font-semibold text-white group-hover:text-pink-500 text-md leading-tight truncate transition-colors duration-300">
             {tool.name}
           </h3>
-          <p className="text-base text-zinc-400 truncate leading-relaxed mt-1">
+          <p className="text-sm text-zinc-500 truncate leading-relaxed mt-1">
             {tool.summary}
           </p>
 
@@ -65,8 +65,8 @@ export function ToolCard({ tool, isHighlighted = false }: Readonly<ToolCardProps
               <div className="flex items-start gap-2.5">
                 <Sparkles className="w-4 h-4 text-pink-500 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs font-semibold text-pink-500 mb-1">{tool.name}</p>
-                  <p className="text-base text-white leading-relaxed">{tool.summary}</p>
+                  <p className="text-sm font-semibold text-pink-500 mb-1">{tool.name}</p>
+                  <p className="text-sm text-white leading-relaxed">{tool.summary}</p>
                 </div>
               </div>
               {/* Flecha */}
@@ -82,8 +82,7 @@ export function ToolCard({ tool, isHighlighted = false }: Readonly<ToolCardProps
               <Badge
                 key={tag}
                 variant="secondary"
-                className="text-[13px] px-1.5 py-0 bg-[#3f3f46] text-pink-500 group-hover:text-white hover:bg-pink-500 transition-colors duration-300"
-              > 
+                className="text-[13px] px-2 py-0.5 rounded-md font-bold bg-zinc-900/80 text-pink-500 border-3 border-pink-500/20 transition-all duration-200 group-hover:bg-pink-500 group-hover:text-white group-hover:border-pink-500/40 backdrop-blur-sm"     > 
                 {tag}
               </Badge>
             ))}

@@ -38,16 +38,6 @@ export class ToolRepository implements IToolRepository {
     return data || []
   }
 
-  async findByUserId(userId: string): Promise<Tool[]> {
-    const { data, error } = await this.client
-      .from('tools')
-      .select('*')
-      .eq('user_id', userId)
-      .order('name', { ascending: true })
-    if (error) throw error
-    return data || []
-  }
-
   async findByPromptSupport(): Promise<Tool[]> {
     const { data, error } = await this.client
       .from('tools')

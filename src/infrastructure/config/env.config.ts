@@ -8,6 +8,10 @@ export const config = {
     apiKey: process.env.ANTHROPIC_API_KEY ?? '',
     model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-4-5',
   },
+  openai: {
+    apiKey: process.env.OPENAI_API_KEY ?? '',
+    embeddingModel: process.env.OPENAI_EMBEDDING_MODEL ?? 'text-embedding-3-small',
+  },
 } as const
 
 export function getSupabaseUrl() {
@@ -28,4 +32,12 @@ export function getAnthropicApiKey() {
 
 export function getAnthropicModel() {
   return config.anthropic.model
+}
+
+export function getOpenAIApiKey() {
+  return config.openai.apiKey
+}
+
+export function getOpenAIEmbeddingModel() {
+  return config.openai.embeddingModel
 }

@@ -23,3 +23,7 @@
 export { Email } from './Email'
 export { Url } from './Url'
 export { Tag } from './Tag'
+export { ChatMessage } from './ChatMessage'
+export type { ChatRole } from './ChatMessage'
+export { RetrievedChunk } from './RetrievedChunk'
+export type { RetrievedChunkProps, RetrievedChunkSource } from './RetrievedChunk'

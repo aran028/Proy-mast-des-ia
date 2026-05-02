@@ -14,7 +14,6 @@ export class CreatePlaylistUseCase {
     description?: string
     icon?: string
     color?: string
-    userId?: string
   }): Promise<Playlist> {
     // Validación con Domain Entity
     const entityData = PlaylistEntity.create({
@@ -29,8 +28,7 @@ export class CreatePlaylistUseCase {
       name: entityData.name,
       description: entityData.description,
       icon: entityData.icon,
-      color: entityData.color,
-      user_id: params.userId || null,
+      color: entityData.color   
     }
 
     return this.playlistRepository.create(playlistData)

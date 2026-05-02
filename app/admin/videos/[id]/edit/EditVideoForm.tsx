@@ -20,7 +20,6 @@ interface VideoData {
   duration: number | null
   viewCount: number | null
   publishedAt: string | null
-  tags: string[] | null
   playlistId: string | null
   toolId: string | null
 }
@@ -108,20 +107,20 @@ export default function EditVideoForm({ video }: Props) {
       )}
 
       <div>
-        <label className="block text-sm text-pink-400 mb-1">Título *</label>
+        <label className="block text-sm text-pink-500 mb-1">Título *</label>
         <input name="title" required minLength={3} defaultValue={video.title}
           className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
       </div>
 
       <div>
-        <label className="block text-sm text-pink-400 mb-1">URL del video *</label>
+        <label className="block text-sm text-pink-500 mb-1">URL del video *</label>
         <input name="videoUrl" required type="url" defaultValue={video.videoUrl}
           className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm text-pink-400 mb-1">Plataforma</label>
+          <label className="block text-sm text-pink-500 mb-1">Plataforma</label>
           <select name="platform" defaultValue={video.platform}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
             <option value="youtube">YouTube</option>
@@ -130,46 +129,40 @@ export default function EditVideoForm({ video }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-sm text-pink-400 mb-1">ID de plataforma</label>
+          <label className="block text-sm text-pink-500 mb-1">ID de plataforma</label>
           <input name="platformVideoId" required defaultValue={video.platformVideoId}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm text-pink-400 mb-1">Descripción</label>
+        <label className="block text-sm text-pink-500 mb-1">Descripción</label>
         <textarea name="description" rows={3} defaultValue={video.description ?? ''}
           className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
       </div>
 
       <div>
-        <label className="block text-sm text-pink-400 mb-1">Thumbnail URL</label>
+        <label className="block text-sm text-pink-500 mb-1">Thumbnail URL</label>
         <input name="thumbnailUrl" type="url" defaultValue={video.thumbnailUrl ?? ''}
           className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm text-pink-400 mb-1">Autor</label>
+          <label className="block text-sm text-pink-500 mb-1">Autor</label>
           <input name="author" defaultValue={video.author ?? ''}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
         </div>
         <div>
-          <label className="block text-sm text-pink-400 mb-1">URL del autor</label>
+          <label className="block text-sm text-pink-500 mb-1">URL del autor</label>
           <input name="authorUrl" type="url" defaultValue={video.authorUrl ?? ''}
             className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
         </div>
-      </div>
-
-      <div>
-        <label className="block text-sm text-pink-400 mb-1">Nº de visualizaciones</label>
-        <input name="viewCount" type="number" min={0} step={1} defaultValue={video.viewCount ?? ''}
-          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
-      </div>
+      </div> 
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm text-pink-400 mb-1">Playlist</label>
+          <label className="block text-sm text-pink-500 mb-1">Playlist</label>
           <select name="playlistId"
             value={selectedPlaylistId}
             onChange={(e) => setSelectedPlaylistId(e.target.value)}
@@ -181,7 +174,7 @@ export default function EditVideoForm({ video }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-sm text-pink-400 mb-1">Tool</label>
+          <label className="block text-sm text-pink-500 mb-1">Tool</label>
           <select name="toolId"
             value={selectedToolId}
             onChange={(e) => setSelectedToolId(e.target.value)}
@@ -193,20 +186,14 @@ export default function EditVideoForm({ video }: Props) {
           </select>
         </div>
       </div>
-
-      <div>
-        <label className="block text-sm text-pink-400 mb-1">Tags (separados por comas)</label>
-        <input name="tags" defaultValue={video.tags?.join(', ') ?? ''}
-          className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" />
-      </div>
-
+  
       <div className="flex gap-3 pt-2 justify-center">
         <button type="submit" disabled={loading}
-          className="bg-pink-400 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
-          {loading ? 'Guardando...' : 'Guardar cambios'}
+          className="bg-pink-500 hover:bg-indigo-700 hover:text-pink-500 hover:scale-110 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
+          {loading ? 'Guardando...' : 'Guardar'}
         </button>
         <button type="button" onClick={() => router.back()}        
-          className="bg-pink-400 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
+          className="bg-pink-500 hover:bg-indigo-700 hover:text-pink-500 hover:scale-110 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
      
           Cancelar
         </button>

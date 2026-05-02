@@ -34,7 +34,7 @@ export default async function EditVideoPage({ params }: Readonly<Props>) {
 
   return (
     <div className="max-w-lg">
-      <h1 className="text-xl font-bold text-pink-400 mb-6">Editar video</h1>
+      <h1 className="text-xl font-bold text-pink-500 mb-6">Editar video</h1>
       <EditVideoForm video={plainVideo} />
     </div>
   )

@@ -27,7 +27,6 @@ const mockRepo: IToolRepository = {
   findAll: vi.fn(),
   findById: vi.fn(),
   findByPlaylistId: vi.fn(),
-  findByUserId: vi.fn(),
   findByPromptSupport: vi.fn(),
   search: vi.fn(),
   create: vi.fn(),
@@ -90,6 +89,17 @@ describe('UpdateToolUseCase', () => {
     await expect(useCase.execute('1', { name: 'A' })).rejects.toThrow(
       'Tool name must be at least 2 characters'
     )
+    expect(mockRepo.update).not.toHaveBeenCalled()
+  })
+
+  it('rejects website with javascript: protocol', async () => {
+    vi.mocked(mockRepo.findById).mockResolvedValue(mockTool)
+
+    const useCase = new UpdateToolUseCase(mockRepo)
+
+    await expect(
+      useCase.execute('1', { website: 'javascript:alert(1)' }),
+    ).rejects.toThrow('Tool website must use http or https')
     expect(mockRepo.update).not.toHaveBeenCalled()
   })
 

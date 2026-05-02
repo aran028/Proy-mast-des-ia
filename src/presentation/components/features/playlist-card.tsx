@@ -67,11 +67,11 @@ export function PlaylistCards({ playlists }: Readonly<PlaylistCardsProps>) {
             <Link
               key={playlist.id}
               href={`/?playlist=${playlist.id}`}
-              className="group relative rounded-lg overflow-hidden bg-zinc-900 hover:bg-zinc-800 transition-all"
+              className="group relative rounded-lg overflow-hidden bg-zinc-900 hover:bg-zinc-800 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/50"
             >
               {/* Imagen/Icono grande */}
               <div
-                className={`aspect-square flex items-center justify-center text-white ${iconBackgroundClass}`}
+                className={`aspect-square flex items-center justify-center text-white transition-transform duration-500 group-hover:scale-105 ${iconBackgroundClass}`}
                 style={customColor ? { backgroundColor: customColor } : undefined}
               >
                 {Icon}

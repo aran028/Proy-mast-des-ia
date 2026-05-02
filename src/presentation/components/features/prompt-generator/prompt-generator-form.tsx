@@ -61,7 +61,7 @@ export function PromptGeneratorForm({ tool }: PromptGeneratorFormProps) {
           className="w-full rounded-md bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-500 px-3 py-2 focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500 resize-y"
         />
         <div className="flex items-center justify-between">
-          <span className="text-xs text-zinc-500">{intent.length} / 1000 caracteres (mínimo 10)</span>
+          <span className="text-md text-zinc-500">{intent.length} / 1000 caracteres (mínimo 10)</span>
           <Button type="submit" disabled={!canSubmit} variant="primary">
             {isLoading ? (
               <>
@@ -87,7 +87,7 @@ export function PromptGeneratorForm({ tool }: PromptGeneratorFormProps) {
       {data && (
         <Card className="p-4 space-y-3 border-pink-500/30">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-pink-400">Prompt generado</h2>
+            <h2 className="text-sm font-semibold text-pink-500">Prompt generado</h2>
             <span className="text-xs text-zinc-500">{data.model}</span>
           </div>
           <pre className="whitespace-pre-wrap text-sm text-zinc-200 bg-zinc-950 border border-zinc-800 rounded-md p-3 font-mono">

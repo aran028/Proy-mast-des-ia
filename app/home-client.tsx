@@ -112,7 +112,7 @@ function HomeContent() {
                   {activePlaylist.name}
                 </h1>
                 {activePlaylist.description && (
-                  <p className="text-zinc-400 mt-2 max-w-3xl">{activePlaylist.description}</p>
+                  <p className="text-zinc-400 mt-2">{activePlaylist.description}</p>
                 )}
               </div>
 

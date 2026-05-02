@@ -11,7 +11,6 @@ const mockTool = {
   website: 'https://openai.com',
   tags: null,
   playlist_id: 'playlist-1',
-  user_id: 'user-1',
   supports_prompt: false,
   created_at: '2024-01-01',
   updated_at: null,
@@ -21,7 +20,6 @@ const mockRepo: IToolRepository = {
   findAll: vi.fn(),
   findById: vi.fn(),
   findByPlaylistId: vi.fn(),
-  findByUserId: vi.fn(),
   findByPromptSupport: vi.fn(),
   search: vi.fn(),
   create: vi.fn(),
@@ -44,7 +42,6 @@ describe('CreateToolUseCase', () => {
       tags: ['ai', 'assistant'],
       website: 'https://openai.com',
       playlistId: 'playlist-1',
-      userId: 'user-1',
     })
 
     expect(result).toEqual(mockTool)
@@ -68,7 +65,7 @@ describe('CreateToolUseCase', () => {
     expect(mockRepo.create).not.toHaveBeenCalled()
   })
 
-  it('maps userId to user_id and playlistId to playlist_id', async () => {
+  it('maps playlistId to playlist_id', async () => {
     vi.mocked(mockRepo.create).mockResolvedValue(mockTool)
 
     const useCase = new CreateToolUseCase(mockRepo)
@@ -76,7 +73,6 @@ describe('CreateToolUseCase', () => {
     await useCase.execute({
       name: 'ChatGPT',
       playlistId: 'playlist-1',
-      userId: 'user-1',
     })
 
     expect(mockRepo.create).toHaveBeenCalledWith({
@@ -87,7 +83,6 @@ describe('CreateToolUseCase', () => {
       website: null,
       supports_prompt: false,
       playlist_id: 'playlist-1',
-      user_id: 'user-1',
     })
   })
 
@@ -100,7 +95,6 @@ describe('CreateToolUseCase', () => {
       name: 'ChatGPT',
       image: ' https://cdn.example.com/chatgpt.png ',
       tags: [' ai ', '', 'assistant'],
-      userId: 'user-1',
     })
 
     expect(mockRepo.create).toHaveBeenCalledWith({
@@ -111,7 +105,6 @@ describe('CreateToolUseCase', () => {
       website: null,
       supports_prompt: false,
       playlist_id: null,
-      user_id: 'user-1',
     })
   })
 })

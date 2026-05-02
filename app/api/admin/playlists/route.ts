@@ -17,7 +17,6 @@ export async function POST(request: Request) {
       description: body.description,
       icon: body.icon,
       color: body.color,
-      userId: admin.id,
     })
 
     return NextResponse.json(result, { status: 201 })

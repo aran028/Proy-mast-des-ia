@@ -159,7 +159,7 @@ export function Header({ onSearch, user }: HeaderProps) {
       <div className="relative flex items-center justify-between px-4 md:px-6 py-3 md:py-4 gap-3">
         <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
           {/* Home */}
-          <Link href="/" className="shrink-0 text-zinc-400 hover:text-pink-400 transition-colors">
+          <Link href="/" className="shrink-0 text-zinc-400 hover:text-pink-500 transition-colors">
             <Home className="size-6" />
           </Link>
 
@@ -179,7 +179,7 @@ export function Header({ onSearch, user }: HeaderProps) {
                   setMobileSearchOpen(false)
                   setSearchFocused(false)
                 }}
-                className="shrink-0 text-zinc-400 hover:text-pink-400 transition-colors"
+                className="shrink-0 text-zinc-400 hover:text-pink-500 transition-colors"
                 aria-label="Cerrar búsqueda"
               >
                 <X className="size-6" />
@@ -265,7 +265,7 @@ export function Header({ onSearch, user }: HeaderProps) {
                               {tool.name}
                             </p>
                             {tool.playlist_id && playlistMap.get(tool.playlist_id) && (
-                              <p className="text-md text-pink-400 truncate">
+                              <p className="text-md text-pink-500 truncate">
                                 {playlistMap.get(tool.playlist_id)}
                               </p>
                             )}
@@ -330,7 +330,7 @@ export function Header({ onSearch, user }: HeaderProps) {
                     <Link
                       href="/admin"
                       role="menuitem"
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-400 hover:text-pink-400 hover:bg-zinc-800 transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-400 hover:text-pink-500 hover:bg-zinc-800 transition-colors"
                     >
                       <Settings className="w-4 h-4" />
                       Panel Admin
@@ -340,7 +340,7 @@ export function Header({ onSearch, user }: HeaderProps) {
                     type="button"
                     role="menuitem"
                     onClick={handleSignOut}
-                    className="flex items-center gap-2 w-full px-4 py-2 text-sm text-zinc-400 hover:text-pink-400 hover:bg-zinc-800 transition-colors"
+                    className="flex items-center gap-2 w-full px-4 py-2 text-sm text-zinc-400 hover:text-pink-500 hover:bg-zinc-800 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
                     Cerrar sesión

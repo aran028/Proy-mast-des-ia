@@ -20,7 +20,6 @@ export async function POST(request: Request) {
       website: body.website,
       playlistId: body.playlistId,
       supportsPrompt: body.supportsPrompt,
-      userId: admin.id,
     })
 
     return NextResponse.json(result, { status: 201 })

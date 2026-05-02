@@ -11,7 +11,6 @@ const mockPlaylist = {
 const mockRepo: IPlaylistRepository = {
   findAll: vi.fn(),
   findById: vi.fn(),
-  findByUserId: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   delete: vi.fn(),

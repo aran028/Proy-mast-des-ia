@@ -283,19 +283,19 @@ export default function EditToolForm({ tool }: Readonly<Props>) {
           className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-pink-500 focus:ring-pink-500"
         />
         <label htmlFor="supportsPrompt" className="text-sm text-zinc-300">
-          <span className='block text-md text-pink-400' >Esta herramienta funciona con prompts</span>
+          <span className='block text-md text-pink-500' >Esta herramienta funciona con prompts</span>
           <span className="block text-xs text-zinc-500">Marca esta opción si la herramienta acepta prompts de texto. Aparecerá en la sección Prompt Generator.</span>
         </label>
       </div>
 
       <div className="flex gap-3 pt-2 justify-center">
         <button type="submit" disabled={loading || uploadingImage}
-          className="bg-pink-600 hover:bg-pink-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
-          {loading ? 'Guardando...' : 'Guardar cambios'}
+          className="bg-pink-600 hover:bg-indigo-700 hover:text-pink-500 hover:scale-110 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
+          {loading ? 'Guardando...' : 'Guardar'}
         </button>
         <button type="button" onClick={() => router.back()}
 
-         className="bg-pink-600 hover:bg-pink-700 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
+         className="bg-pink-600 hover:bg-indigo-700 hover:text-pink-500 hover:scale-110 text-white text-sm px-4 py-2 rounded-md disabled:opacity-50">
                    Cancelar
         </button>
       </div>

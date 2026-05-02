@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Search } from 'lucide-react'
 import type { Tables } from '@/shared/types/database.types'
 import DeleteButton from '@/presentation/components/admin/DeleteButton'
+import { Pencil, Plus } from 'lucide-react';
 
 type Tool = Tables<'tools'>
 type Playlist = Tables<'playlists'>
@@ -21,6 +23,9 @@ export default function AdminToolsPage() {
 
   const getPlaylistName = (playlistId: string | null) =>
     playlists.find((playlist) => playlist.id === playlistId)?.name ?? '—'
+
+  const getPlaylistColor = (playlistId: string | null) =>
+    playlists.find((playlist) => playlist.id === playlistId)?.color ?? undefined
 
   async function loadData() {
     try {
@@ -95,8 +100,9 @@ export default function AdminToolsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-pink-500">Tools</h1>
         <Link href="/admin/tools/new"
-          className="bg-pink-500 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md">
-          Nueva tool
+     className="bg-pink-500 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-md flex items-center gap-2 transition-colors font-medium shadow-lg shadow-pink-500/20">
+     <Plus className="size-4" />          
+          Nueva tool      
         </Link>
       </div>
 
@@ -121,7 +127,7 @@ export default function AdminToolsPage() {
         <table className="w-full text-sm">
           <thead className="border-b border-zinc-800">
             <tr>
-              <th className="text-left text-pink-500 px-4 py-3">NOMBRE</th>
+              <th className="text-left text-pink-500 px-4 py-3">TOOL</th>
               <th className="text-left text-pink-500 px-4 py-3">PLAYLIST</th>
               <th className="text-left text-pink-500 px-4 py-3">RESUMEN</th>
               <th className="text-left text-pink-500 px-4 py-3">TAGS</th>
@@ -131,14 +137,23 @@ export default function AdminToolsPage() {
           <tbody>
             {currentTools.map(t => (
               <tr key={t.id} className="border-b border-zinc-800 last:border-0">
-                <td className="text-white px-4 py-3">{t.name}</td>
-                <td className="text-white px-4 py-3">{getPlaylistName(t.playlist_id)}</td>
-                <td className="text-zinc-400 px-4 py-3 max-w-md truncate">{t.summary || '—'}</td>
+                <td className="text-white px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    {t.image && URL.canParse(t.image) ? (
+                      <Image src={t.image} alt={t.name} width={32} height={32} className="rounded object-cover" />
+                    ) : (
+                      <span className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded text-sm">🔧</span>
+                    )}
+                    <span>{t.name}</span>
+                  </div>
+                </td>
+                  <td className="text-white px-4 py-3" style={{ backgroundColor: getPlaylistColor(t.playlist_id) }}>{getPlaylistName(t.playlist_id)}</td>
+                <td className="text-white px-4 py-3 max-w-md truncate">{t.summary || '—'}</td>
                 <td className="text-zinc-400 px-4 py-3">
                   {t.tags && t.tags.length > 0 ? (
                     <div className="flex flex-wrap gap-1">
                       {t.tags.slice(0, 3).map(tag => (
-                        <span key={tag} className="inline-block bg-zinc-800 px-2 py-0.5 rounded text-xs">
+                        <span key={tag} className="inline-block bg-pink-500 text-white px-2 py-0.5 rounded text-xs">
                           {tag}
                         </span>
                       ))}
@@ -151,10 +166,12 @@ export default function AdminToolsPage() {
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-4">
                     <Link href={`/admin/tools/${t.id}/edit`}
-                      className="text-pink-400 hover:text-indigo-300">Editar</Link>
-                    <DeleteButton url={`/api/admi<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  
-n/tools/${t.id}`} onSuccess={handleRefresh} />
+   className="p-2 rounded-md text-zinc-400 hover:text-pink-500 hover:bg-zinc-800 transition-colors"
+      title="Editar playlist">
+        <Pencil className="size-4" />
+      <span className="sr-only">Editar</span> {/* Para accesibilidad (lectores de pantalla) */}
+      </Link>
+           <DeleteButton url={`/api/admin/tools/${t.id}`} onSuccess={handleRefresh} />
                   </div>
                 </td>
               </tr>

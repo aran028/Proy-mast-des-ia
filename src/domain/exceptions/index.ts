@@ -5,5 +5,10 @@ export {
   PracticeNotFoundException,
   ValidationException,
   ToolNotPromptEnabledException,
-  PromptGenerationException
+  PromptGenerationException,
+  EmbeddingFailedException,
+  RetrievalFailedException,
+  ChatGenerationException,
+  DocumentNotFoundException,
+  UnsupportedDocumentTypeException,
 } from './domain.exception'

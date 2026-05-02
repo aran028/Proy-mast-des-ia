@@ -1,4 +1,4 @@
- export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -14,6 +14,88 @@ export type Database = {
   }
   public: {
     Tables: {
+      document_embeddings: {
+        Row: {
+          chunk_index: number
+          content: string
+          created_at: string
+          document_id: string | null
+          embedding: string
+          id: string
+          metadata: Json
+          source_id: string | null
+          source_type: string
+        }
+        Insert: {
+          chunk_index?: number
+          content: string
+          created_at?: string
+          document_id?: string | null
+          embedding: string
+          id?: string
+          metadata?: Json
+          source_id?: string | null
+          source_type: string
+        }
+        Update: {
+          chunk_index?: number
+          content?: string
+          created_at?: string
+          document_id?: string | null
+          embedding?: string
+          id?: string
+          metadata?: Json
+          source_id?: string | null
+          source_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_embeddings_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          created_at: string
+          filename: string
+          id: string
+          mime_type: string
+          size_bytes: number
+          title: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          filename: string
+          id?: string
+          mime_type: string
+          size_bytes: number
+          title: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          filename?: string
+          id?: string
+          mime_type?: string
+          size_bytes?: number
+          title?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       playlists: {
         Row: {
           color: string | null
@@ -23,7 +105,6 @@ export type Database = {
           id: string
           name: string
           updated_at: string | null
-          user_id: string | null
         }
         Insert: {
           color?: string | null
@@ -33,7 +114,6 @@ export type Database = {
           id?: string
           name: string
           updated_at?: string | null
-          user_id?: string | null
         }
         Update: {
           color?: string | null
@@ -43,7 +123,6 @@ export type Database = {
           id?: string
           name?: string
           updated_at?: string | null
-          user_id?: string | null
         }
         Relationships: []
       }
@@ -79,7 +158,6 @@ export type Database = {
           supports_prompt: boolean
           tags: string[] | null
           updated_at: string | null
-          user_id: string | null
           website: string | null
         }
         Insert: {
@@ -92,7 +170,6 @@ export type Database = {
           supports_prompt?: boolean
           tags?: string[] | null
           updated_at?: string | null
-          user_id?: string | null
           website?: string | null
         }
         Update: {
@@ -105,7 +182,6 @@ export type Database = {
           supports_prompt?: boolean
           tags?: string[] | null
           updated_at?: string | null
-          user_id?: string | null
           website?: string | null
         }
         Relationships: [
@@ -207,7 +283,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      match_documents: {
+        Args: {
+          match_count?: number
+          match_threshold?: number
+          query_embedding: string
+        }
+        Returns: {
+          content: string
+          document_id: string
+          id: string
+          metadata: Json
+          similarity: number
+          source_id: string
+          source_type: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

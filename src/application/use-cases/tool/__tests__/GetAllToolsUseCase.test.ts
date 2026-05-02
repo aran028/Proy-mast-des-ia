@@ -20,7 +20,6 @@ const mockRepo: IToolRepository = {
   findAll: vi.fn(),
   findById: vi.fn(),
   findByPlaylistId: vi.fn(),
-  findByUserId: vi.fn(),
   findByPromptSupport: vi.fn(),
   search: vi.fn(),
   create: vi.fn(),
